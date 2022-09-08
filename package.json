@@ -1,0 +1,24 @@
+{
+    "name": "dyetools",
+    "private": true,
+    "version": "2.0.0",
+    "contributors": [
+        "Blechlawine",
+        "NilsB2911"
+    ],
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vue-tsc --noEmit && vite build",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "vue": "^3.2.37"
+    },
+    "devDependencies": {
+        "@vitejs/plugin-vue": "^3.1.0",
+        "typescript": "^4.6.4",
+        "vite": "^3.1.0",
+        "vue-tsc": "^0.40.4"
+    }
+}
