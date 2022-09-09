@@ -1,0 +1,31 @@
+<template>
+    <Button class="imgButton" :style="size" @click="$emit('click', $event)">
+        <span class="material-icons">{{ icon }}</span>
+    </Button>
+</template>
+
+<script setup lang="ts">
+import { computed } from "vue";
+import Button from "./Button.vue";
+
+const props = defineProps({
+    icon: {
+        type: String,
+        required: true,
+    },
+    large: {
+        type: Boolean,
+    },
+});
+
+const size = computed(() => ({
+    width: props.large ? "48px" : "40px",
+    height: props.large ? "48px" : "40px",
+}));
+</script>
+
+<style scoped>
+.imgButton {
+    cursor: pointer;
+}
+</style>
