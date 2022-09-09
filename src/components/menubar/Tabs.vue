@@ -36,8 +36,8 @@ onMounted(() => {
 });
 
 const tabHighlightStyles = computed(() => ({
-    width: highlightWidth + "px",
-    "margin-left": highlightMarginLeft + "px",
+    width: highlightWidth.value + "px",
+    "margin-left": highlightMarginLeft.value + "px",
 }));
 </script>
 <style scoped>
