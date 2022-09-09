@@ -1,5 +1,5 @@
 <template>
-    <div v-on:mousedown="handleMouseDown" class="satValPicker" :style="gradientStyles" ref="fieldRef">
+    <div @mousedown="handleMouseDown" class="satValPicker" :style="gradientStyles" ref="fieldRef">
         <div class="satValHandle" :style="handleStyles"></div>
     </div>
 </template>
@@ -131,4 +131,29 @@ const setHandlePos = (x: number, y: number) => {
     emit("satValChanged", sat.value, val.value);
 };
 </script>
-<style scoped></style>
+<style scoped>
+.satValPicker {
+    width: 100%;
+    height: 200px;
+    border-radius: 6px;
+
+    background-color: white;
+
+    /* Das blockiert scrollen wenn man den Picker toucht */
+    touch-action: none;
+    position: relative;
+}
+
+.satValHandle {
+    position: absolute;
+
+    left: -8px;
+    top: -8px;
+
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 4px solid var(--white);
+    box-shadow: var(--shadow2px);
+}
+</style>

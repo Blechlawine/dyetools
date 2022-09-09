@@ -1,7 +1,7 @@
 <template>
-    <div class="sliderpart">
+    <div class="sliderCollection">
         <SliderPart
-            v-model="cyan"
+            v-model="_cyan"
             label="Cyan"
             :min="0"
             :max="100"
@@ -10,7 +10,7 @@
         >
         </SliderPart>
         <SliderPart
-            v-model="magenta"
+            v-model="_magenta"
             label="Magenta"
             :min="0"
             :max="100"
@@ -19,7 +19,7 @@
         >
         </SliderPart>
         <SliderPart
-            v-model="yellow"
+            v-model="_yellow"
             label="Yellow"
             :min="0"
             :max="100"
@@ -28,7 +28,7 @@
         >
         </SliderPart>
         <SliderPart
-            v-model="key"
+            v-model="_key"
             label="Key"
             :min="0"
             :max="100"
@@ -68,53 +68,53 @@ const props = defineProps({
 });
 
 const handleBackground = computed(() => {
-    let chromeHandle = chroma.cmyk(cyan.value / 100, magenta.value / 100, yellow.value / 100, key.value / 100);
+    let chromeHandle = chroma.cmyk(_cyan.value / 100, _magenta.value / 100, _yellow.value / 100, _key.value / 100);
     return `rgb(${chromeHandle.get("rgb.r")}, ${chromeHandle.get("rgb.g")}, ${chromeHandle.get("rgb.b")})`;
 });
 const cyanBackground = computed(() => {
-    let atZero = chroma.cmyk(0, magenta.value / 100, yellow.value / 100, key.value / 100);
-    let atHundred = chroma.cmyk(1, magenta.value / 100, yellow.value / 100, key.value / 100);
+    let atZero = chroma.cmyk(0, _magenta.value / 100, _yellow.value / 100, _key.value / 100);
+    let atHundred = chroma.cmyk(1, _magenta.value / 100, _yellow.value / 100, _key.value / 100);
     return `linear-gradient(to right, rgb(${atZero.get("rgb.r")}, ${atZero.get("rgb.g")}, ${atZero.get(
         "rgb.b"
     )}), rgb(${atHundred.get("rgb.r")},  ${atHundred.get("rgb.g")}, ${atHundred.get("rgb.b")}))`;
 });
 const magentaBackground = computed(() => {
-    let atZero = chroma.cmyk(cyan.value / 100, 0, yellow.value / 100, key.value / 100);
-    let atHundred = chroma.cmyk(cyan.value, 1, yellow.value / 100, key.value / 100);
+    let atZero = chroma.cmyk(_cyan.value / 100, 0, _yellow.value / 100, _key.value / 100);
+    let atHundred = chroma.cmyk(_cyan.value / 100, 1, _yellow.value / 100, _key.value / 100);
     return `linear-gradient(to right, rgb(${atZero.get("rgb.r")}, ${atZero.get("rgb.g")}, ${atZero.get(
         "rgb.b"
     )}), rgb(${atHundred.get("rgb.r")}, ${atHundred.get("rgb.g")}, ${atHundred.get("rgb.b")}))`;
 });
 const yellowBackground = computed(() => {
-    let atZero = chroma.cmyk(cyan.value, magenta.value / 100, 0, key.value / 100);
-    let atHundred = chroma.cmyk(cyan.value, magenta.value / 100, 1, key.value / 100);
+    let atZero = chroma.cmyk(_cyan.value / 100, _magenta.value / 100, 0, _key.value / 100);
+    let atHundred = chroma.cmyk(_cyan.value / 100, _magenta.value / 100, 1, _key.value / 100);
     return `linear-gradient(to right, rgb(${atZero.get("rgb.r")}, ${atZero.get("rgb.g")}, ${atZero.get(
         "rgb.b"
     )}), rgb(${atHundred.get("rgb.r")}, ${atHundred.get("rgb.g")}, ${atHundred.get("rgb.b")}))`;
 });
 const keyBackground = computed(() => {
-    let atZero = chroma.cmyk(cyan.value, magenta.value / 100, yellow.value / 100, 0);
-    let atHundred = chroma.cmyk(cyan.value, magenta.value / 100, yellow.value / 100, 1);
+    let atZero = chroma.cmyk(_cyan.value / 100, _magenta.value / 100, _yellow.value / 100, 0);
+    let atHundred = chroma.cmyk(_cyan.value / 100, _magenta.value / 100, _yellow.value / 100, 1);
     return `linear-gradient(to right, rgb(${atZero.get("rgb.r")}, ${atZero.get("rgb.g")}, ${atZero.get(
         "rgb.b"
     )}), rgb(${atHundred.get("rgb.r")}, ${atHundred.get("rgb.g")}, ${atHundred.get("rgb.b")}))`;
 });
 
-const cyan: WritableComputedRef<number> = computed({
+const _cyan: WritableComputedRef<number> = computed({
     get: () => props.cyan,
-    set: (c) => emit("change", { c, m: magenta.value, y: yellow.value, k: key.value }),
+    set: (c) => emit("change", { c, m: _magenta.value, y: _yellow.value, k: _key.value }),
 });
-const magenta: WritableComputedRef<number> = computed({
+const _magenta: WritableComputedRef<number> = computed({
     get: () => props.cyan,
-    set: (m) => emit("change", { c: cyan.value, m, y: yellow.value, k: key.value }),
+    set: (m) => emit("change", { c: _cyan.value, m, y: _yellow.value, k: _key.value }),
 });
-const yellow: WritableComputedRef<number> = computed({
+const _yellow: WritableComputedRef<number> = computed({
     get: () => props.cyan,
-    set: (y) => emit("change", { c: cyan.value, m: magenta.value, y, k: key.value }),
+    set: (y) => emit("change", { c: _cyan.value, m: _magenta.value, y, k: _key.value }),
 });
-const key: WritableComputedRef<number> = computed({
+const _key: WritableComputedRef<number> = computed({
     get: () => props.k,
-    set: (k) => emit("change", { c: cyan.value, m: magenta.value, y: yellow.value, k }),
+    set: (k) => emit("change", { c: _cyan.value, m: _magenta.value, y: _yellow.value, k }),
 });
 </script>
 <style scoped></style>

@@ -2,14 +2,12 @@
     <div class="colorPicker" :style="colorPickerResponsiveStyles">
         <div class="topPart" :style="topBottomResponsiveStyles">
             <div class="horizontalFlex">
-                <span v-if="closable" class="material-icons" @click="">close</span>
+                <span v-if="closable" class="material-icons" @click="emit('close')">close</span>
             </div>
             <SatValPicker
-                :saturationIn="sat"
-                :valueIn="val"
-                :hue="hue"
                 :saturation="sat"
                 :value="val"
+                :hue="hue"
                 @satValChanged="satValChanged"
                 @changeEnd="changeEnd"
             />
@@ -39,10 +37,10 @@
             ></RGBSliderCollection>
             <CMYKSliderCollection
                 v-else-if="sliderMode === 'cmyk'"
-                :cyan="chrome.get('cmyk.c')"
-                :magenta="chrome.get('cmyk.m')"
-                :yellow="chrome.get('cmyk.y')"
-                :k="chrome.get('cmyk.k')"
+                :cyan="chrome.get('cmyk.c') * 100"
+                :magenta="chrome.get('cmyk.m') * 100"
+                :yellow="chrome.get('cmyk.y') * 100"
+                :k="chrome.get('cmyk.k') * 100"
                 @change="sliderChanged"
                 @change-end="changeEnd"
             >
@@ -50,8 +48,8 @@
             <HSLSliderCollection
                 v-else-if="sliderMode === 'hsl'"
                 :hue="chrome.get('hsl.h')"
-                :saturation="chrome.get('hsl.s')"
-                :lightness="chrome.get('hsl.l')"
+                :saturation="chrome.get('hsl.s') * 100"
+                :lightness="chrome.get('hsl.l') * 100"
                 @change="sliderChanged"
                 @change-end="changeEnd"
             >
@@ -72,13 +70,14 @@
                 :model-value="chrome.hex().toUpperCase()"
                 @update:model-value="textIn"
             ></TextInput>
-            <Swatches
+            <!-- TODO: DOESNT WORK -->
+            <!-- <Swatches
                 v-else
                 :type="sliderMode"
                 :trigger-sort="triggerSort"
                 :hex="chrome.hex()"
                 @change="textIn"
-            ></Swatches>
+            ></Swatches> -->
         </div>
     </div>
 </template>
@@ -115,6 +114,7 @@ interface ISliderCollectionChangeEventPayload {
 const emit = defineEmits<{
     (e: "colorChange", color: { hue: number; sat: number; val: number }): void;
     (e: "changeEnd"): void;
+    (e: "close"): void;
 }>();
 
 const props = defineProps({
@@ -188,9 +188,9 @@ const copyValue = computed(() => {
     }
 });
 const colorPickerResponsiveStyles = computed(() => ({
-    "flex-direction": props.responsive && winHeight.value <= 768 ? ("row" as "row") : ("unset" as "unset"), // wtf is this? why can it not infer the literal type
-    width: props.responsive && winHeight.value <= 768 ? 345 * 2 : 345,
-    height: props.responsive && winHeight.value <= 768 ? 298 : undefined,
+    "flex-direction": props.responsive && winHeight.value <= 768 ? ("row" as "row") : ("column" as "column"), // wtf is this? why can it not infer the literal type
+    width: props.responsive && winHeight.value <= 768 ? "calc(345px * 2)" : "345px",
+    height: props.responsive && winHeight.value <= 768 ? "298px" : "",
 }));
 const topBottomResponsiveStyles = computed(() => ({
     width: props.responsive && winHeight.value <= 768 ? "345px" : "",
@@ -292,14 +292,6 @@ const changeEnd = () => {
     background-color: var(--background);
 }
 
-.sliderpartpart p {
-    -webkit-user-select: none;
-    -moz-user-select: -moz-none;
-    -khtml-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
 .topPart,
 .bottomPart {
     width: 100%;
@@ -308,5 +300,12 @@ const changeEnd = () => {
     align-items: center;
     justify-content: flex-start;
     grid-gap: 8px;
+}
+
+.sliderCollection {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 </style>

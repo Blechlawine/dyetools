@@ -1,6 +1,6 @@
 <template>
-    <div class="sliderpart">
-        <SliderPart
+    <div class="sliderCollection">
+    <SliderPart
             v-model="red"
             label="Red"
             :min="0"

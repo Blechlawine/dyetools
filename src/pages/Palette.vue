@@ -1,77 +1,48 @@
 <template>
-    <teleport to='head' >
-        <meta name="description" :content="colors.map(c => c.hex).join(', ')" />
-        <meta property="og:description" :content="colors.map(c => c.hex).join(', ')" />
-        <meta property="og:title" content="Dyetools - Color palette">
+    <teleport to="head">
+        <meta name="description" :content="colors.map((c) => c.hex).join(', ')" />
+        <meta property="og:description" :content="colors.map((c) => c.hex).join(', ')" />
+        <meta property="og:title" content="Dyetools - Color palette" />
         <title>Dyetools - Color palette</title>
     </teleport>
     <div class="palette">
         <div class="settingsBar">
-            <Dropdown :values="harmonyValues" @onSelect="changeHarmony" />
-            <Dropdown :values="displayTypes" @onSelect="changeDisplayType" />
+            <Dropdown :values="harmonyValues" @select="changeHarmony" />
+            <Dropdown :values="displayTypes" @select="displayTypeIndex = $event" />
             <ImgButton icon="share" @click="share" />
             <ImgButton icon="refresh" @click="generateColorsForSelectedHarmony"></ImgButton>
         </div>
         <transition-group name="move" tag="div" class="paletteColors">
-            <div
+            <PaletteColor
                 v-for="(color, index) in colors"
-                class="paletteColor move-transition"
-                :style="`background-color: ${color.hex}; color: ${textColor(color.hex)}`"
-                :key="color.hashId"
-            >
-                <div :class="getClassesForLeftAddColorButton(index)">
-                    <span @click="addColor(index)" class="material-icons">add</span>
-                </div>
-                <div class="colorInfo">
-                    <p class="colorLabel">
-                        {{ getDisplayText(color.hex) }}
-                        <span class="material-icons" v-if="color.locked">push_pin</span>
-                    </p>
-                    <span class="material-icons copyIcon" @click="copyString(color.hex)">content_copy</span>
-                    <span class="material-icons editIcon" @click="togglePicker(index)">edit</span>
-                    <span>
-                        <span
-                            :class="pinClasses(color.locked)"
-                            :style="`opacity: ${color.locked ? '1' : '0.6'}`"
-                            @click="pinColor(index)"
-                            >push_pin</span
-                        >
-                    </span>
-                    <span class="material-icons deleteIcon" @click="deleteColor(index)">delete</span>
-                    <span class="leftRightButtons">
-                        <div class="moveLeftButton" @click="moveColorLeft(index)" v-if="index !== 0">
-                            <span class="material-icons">chevron_left</span>
-                        </div>
-                        <div class="moveRightButton" @click="moveColorRight(index)" v-if="index !== colors.length - 1">
-                            <span class="material-icons">chevron_right</span>
-                        </div>
-                    </span>
-                </div>
-                <div :class="getClassesForRightAddColorButton(index)">
-                    <span class="material-icons" @click="addColor(index + 1)">add</span>
-                </div>
-                <ColorPickerBig
-                    responsive
-                    closable
-                    :hueIn="chroma(color.hex).get('hsv.h')"
-                    :satIn="chroma(color.hex).get('hsv.s')"
-                    :valIn="chroma(color.hex).get('hsv.v')"
-                    class="colorPickerBig"
-                    @colorChanged="editColor(color, $event)"
-                    @pickerClose="togglePicker(index)"
-                    v-if="openPickerId === index"
-                />
-            </div>
+                :key="index"
+                :color="color"
+                :canMoveLeft="index !== 0"
+                :canMoveRight="index !== colors.length - 1"
+                :displayType="displayType"
+                :pickerOpen="openPickerId === index"
+                :index="index"
+                :max-index="colors.length - 1"
+                @togglePicker="togglePicker(index)"
+                @moveLeft="moveColorLeft(index)"
+                @moveRight="moveColorRight(index)"
+                @delete="deleteColor(index)"
+                @edit="(color, data) => editColor(color, data)"
+                @pin="pinColor(index)"
+                @add="addColor($event)"
+            ></PaletteColor>
         </transition-group>
     </div>
 </template>
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeMount } from "vue";
-import { genRandHex, copyString } from "../utils";
 import chroma from "chroma-js";
 import { useRouter } from "vue-router";
-import { toastText } from "../stores/store";
+import Dropdown from "../components/inputs/Dropdown.vue";
+import PaletteColor from "../components/PaletteColor.vue";
 import ImgButton from "../components/button/ImgButton.vue";
+import { genRandHex, copyString } from "../utils";
+import { toastText } from "../stores/store";
 
 const Router = useRouter();
 
@@ -118,7 +89,11 @@ const colors = ref<IColor[]>([
 ]);
 const openPickerId = ref(-1);
 const harmony = ref("auto");
-const selectedDisplayType = ref("HEX");
+const displayTypeIndex = ref(0);
+
+const lockedColors = computed(() => colors.value.filter((color) => color.locked));
+const unlockedColors = computed(() => colors.value.filter((color) => !color.locked));
+const displayType = computed(() => displayTypes[displayTypeIndex.value]);
 
 const moveColorLeft = (id: number) => {
     let tempColors = colors.value;
@@ -136,42 +111,15 @@ const moveColorRight = (id: number) => {
     colors.value = tempColors;
     updateRoute();
 };
-const getClassesForLeftAddColorButton = (index: number) => ({
-    addColorButton: true,
-    moveLeft: index != 0,
-    moveRight: index == 0,
-});
-const getClassesForRightAddColorButton = (index: number) => ({
-    addColorButton: true,
-    moveLeft: index == colors.value.length - 1,
-    moveRight: index != colors.value.length - 1,
-});
-const getDisplayText = (hexIn: string) => {
-    switch (selectedDisplayType.value.toLowerCase()) {
-        case "hsl":
-            let hue = Math.round(chroma(hexIn).get("hsl.h"));
-            let sat = Math.round(chroma(hexIn).get("hsl.s") * 100);
-            let lig = Math.round(chroma(hexIn).get("hsl.l") * 100);
-            return `hsl(${isNaN(hue) ? 0 : hue}, ${sat}%, ${lig}%)`;
-        case "rgb":
-            return chroma(hexIn).css();
-        case "hex":
-            return hexIn;
-    }
-};
 const changeHarmony = (valueIndex: number) => {
     harmony.value = harmonyValues[valueIndex].toLowerCase();
     generateColorsForSelectedHarmony();
-};
-const changeDisplayType = (valueIndex: number) => {
-    selectedDisplayType.value = displayTypes[valueIndex];
 };
 const share = () => {
     let path = window.location.href;
     copyString(path);
     toastText.value = "Link copied!";
 };
-const textColor = (hex: string) => (chroma(hex).luminance() < 0.5 ? "var(--text-white)" : "var(--text-dark)");
 const pinColor = (index: number) => {
     colors.value[index].locked = !colors.value[index].locked;
 };
@@ -403,9 +351,6 @@ const updateRoute = () => {
     Router.push({ path: Router.currentRoute.value.path, query: { colors: queryString } });
 };
 
-const lockedColors = computed(() => colors.value.filter((color) => color.locked));
-const unlockedColors = computed(() => colors.value.filter((color) => !color.locked));
-
 onBeforeMount(() => {
     if (Router.currentRoute.value.query.colors == null) {
         generateColorsForSelectedHarmony();
@@ -461,151 +406,9 @@ onMounted(() => {
     flex: 1;
 }
 
-.paletteColor {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    min-width: 170px;
-}
-
-.paletteColor * {
-    color: inherit;
-}
-
-.addColorIcon,
-.addColorButton {
-    width: 24px;
-    height: 24px;
-    background-color: var(--background);
-    border-radius: 50%;
-    color: var(--textColorDark);
-    cursor: pointer;
-}
-
-.addColorButton.moveLeft {
-    transform: translateX(-50%);
-}
-
-.addColorButton.moveRight {
-    transform: translateX(50%);
-}
-
-.copyIcon,
-.pinIcon,
-.editIcon,
-.deleteIcon {
-    cursor: pointer;
-}
-
-.paletteColor .colorInfo {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    grid-gap: 24px;
-}
-
-.colorInfo > *:not(.colorLabel) {
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 200ms;
-}
-
-.colorLabel {
-    font-size: 24px;
-    transform: translateY(443%);
-    transition: transform 200ms;
-    display: flex;
-    align-items: center;
-    grid-gap: 8px;
-}
-
-.paletteColor:hover .colorInfo > * {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.paletteColor:hover .colorLabel {
-    transform: translateY(0);
-}
-
-.leftRightButtons {
-    display: flex;
-    flex-direction: row;
-    grid-gap: 24px;
-}
-
-.leftRightButtons .material-icons {
-    font-size: 32px;
-    cursor: pointer;
-}
-
-.colorPickerBig {
-    position: absolute;
-
-    opacity: 0;
-    pointer-events: none;
-
-    z-index: 100;
-
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-
 @media screen and (max-width: 768px) {
     .paletteColors {
         flex-direction: column;
     }
-
-    .paletteColor {
-        flex-direction: column;
-        min-height: 100px;
-    }
-
-    .paletteColor .colorInfo {
-        flex-direction: row;
-    }
-
-    .addColorButton.moveLeft {
-        transform: translateY(-50%);
-    }
-
-    .addColorButton.moveRight {
-        transform: translateY(50%);
-    }
-
-    .colorLabel {
-        transform: translateX(0%);
-    }
-
-    .leftRightButtons {
-        transform: rotateZ(90deg);
-        width: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-}
-
-/* Transitions */
-.move-enter,
-.move-leave-to {
-    transform: translateY(100%);
-}
-
-.move-leave-active {
-    position: absolute;
-    opacity: 0;
-    height: 100%;
-}
-
-.move-enter-active *,
-.move-leave-active * {
-    opacity: 0;
-}
-
-.move-transition {
-    transition: all 300ms;
 }
 </style>

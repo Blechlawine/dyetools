@@ -27,5 +27,8 @@ const size = computed(() => ({
 <style scoped>
 .imgButton {
     cursor: pointer;
+    background-color: var(--light-gray);
+    border-radius: 6px;
+    padding: 6px;
 }
 </style>

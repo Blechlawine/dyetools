@@ -1,7 +1,7 @@
 <template>
-    <div class="sliderpart">
+    <div class="sliderCollection">
         <SliderPart
-            v-model="hue"
+            v-model="_hue"
             label="Hue"
             :min="0"
             :max="360"
@@ -10,7 +10,7 @@
         >
         </SliderPart>
         <SliderPart
-            v-model="saturation"
+            v-model="_saturation"
             label="Saturation"
             :min="0"
             :max="100"
@@ -19,7 +19,7 @@
         >
         </SliderPart>
         <SliderPart
-            v-model="lightness"
+            v-model="_lightness"
             label="Lightness"
             :min="0"
             :max="100"
@@ -53,37 +53,37 @@ const props = defineProps({
     },
 });
 
-const handleBackground = computed(() => `hsl(${hue.value}, ${saturation.value}, ${lightness.value})`);
+const handleBackground = computed(() => `hsl(${_hue.value}, ${_saturation.value}%, ${_lightness.value}%)`);
 const hueBackground = computed(
     () =>
         `linear-gradient(to right, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%)`
 );
 const saturationBackground = computed(
     () =>
-        `linear-gradient(to right, hsl(${Math.round(hue.value)}, 0%, ${Math.round(lightness.value)}%), hsl(${Math.round(
-            hue.value
-        )}, 100%, ${Math.round(lightness.value)}%))`
+        `linear-gradient(to right, hsl(${Math.round(_hue.value)}, 0%, ${Math.round(_lightness.value)}%), hsl(${Math.round(
+            _hue.value
+        )}, 100%, ${Math.round(_lightness.value)}%))`
 );
 const lightnessBackground = computed(
     () =>
-        `linear-gradient(to right, hsl(${Math.round(hue.value)}, ${Math.round(
-            saturation.value
-        )}%, 0%), hsl(${Math.round(hue.value)}, ${Math.round(saturation.value)}%, 50%), hsl(${Math.round(
-            hue.value
-        )}, ${Math.round(saturation.value)}%, 100%))`
+        `linear-gradient(to right, hsl(${Math.round(_hue.value)}, ${Math.round(
+            _saturation.value
+        )}%, 0%), hsl(${Math.round(_hue.value)}, ${Math.round(_saturation.value)}%, 50%), hsl(${Math.round(
+            _hue.value
+        )}, ${Math.round(_saturation.value)}%, 100%))`
 );
 
-const hue: WritableComputedRef<number> = computed({
+const _hue: WritableComputedRef<number> = computed({
     get: () => props.hue,
-    set: (h) => emit("change", { hue: h, saturation: saturation.value, lightness: lightness.value }),
+    set: (h) => emit("change", { hue: h, saturation: _saturation.value, lightness: _lightness.value }),
 });
-const saturation: WritableComputedRef<number> = computed({
+const _saturation: WritableComputedRef<number> = computed({
     get: () => props.saturation,
-    set: (s) => emit("change", { hue: hue.value, saturation: s, lightness: lightness.value }),
+    set: (s) => emit("change", { hue: _hue.value, saturation: s, lightness: _lightness.value }),
 });
-const lightness: WritableComputedRef<number> = computed({
+const _lightness: WritableComputedRef<number> = computed({
     get: () => props.lightness,
-    set: (l) => emit("change", { hue: hue.value, saturation: saturation.value, lightness: l }),
+    set: (l) => emit("change", { hue: _hue.value, saturation: _saturation.value, lightness: l }),
 });
 </script>
 <style scoped></style>

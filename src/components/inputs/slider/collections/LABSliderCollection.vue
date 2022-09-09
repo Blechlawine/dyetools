@@ -1,5 +1,5 @@
 <template>
-    <div class="sliderpart">
+    <div class="sliderCollection">
         <SliderPart
             v-model="l"
             label="L*"

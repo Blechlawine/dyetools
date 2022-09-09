@@ -1,5 +1,7 @@
 <template>
-    <button :class="classes" @click="$emit('click', $event)"></button>
+    <button :class="classes" @click="$emit('click', $event)">
+        <slot></slot>
+    </button>
 </template>
 <script setup lang="ts">
 import { computed } from "vue";
@@ -35,6 +37,10 @@ button {
     border-radius: 6px;
     padding: 8px 12px;
     cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .primary {
@@ -45,13 +51,5 @@ button {
 .secondary {
     color: var(--textColorDark);
     background-color: var(--light-gray);
-}
-
-.imgButton {
-    background-color: var(--light-gray);
-    border-radius: 6px;
-    padding: 6px;
-    width: 48px;
-    height: 48px;
 }
 </style>

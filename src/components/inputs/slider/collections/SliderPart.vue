@@ -1,5 +1,5 @@
 <template>
-    <div class="sliderpartpart" :style="backgroundStyle">
+    <div class="sliderpart" :style="backgroundStyle">
         <div class="horizontalFlex">
             <p :style="textStyle">{{ label }}</p>
             <NumberInput :model-value="Math.round(value)" @update:model-value="value = $event" />
@@ -67,4 +67,8 @@ const backgroundStyle = computed(() => ({
     background: props.background,
 }));
 </script>
-<style scoped></style>
+<style scoped>
+.sliderpart p {
+    user-select: none;
+}
+</style>

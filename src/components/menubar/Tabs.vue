@@ -15,7 +15,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import routes from "../../routes";
 
@@ -26,14 +26,23 @@ const prevHighlightWidth = ref(0);
 const highlightMarginLeft = ref(0);
 const prevHighlightMarginLeft = ref(0);
 
+watch(
+    () => Router.currentRoute.value,
+    () => updateHighlight()
+);
+
 onMounted(() => {
+    updateHighlight();
+});
+
+const updateHighlight = () => {
     highlightWidth.value = document.getElementById("activeTab")!.clientWidth;
     highlightMarginLeft.value =
         document.getElementById("activeTab")!.getBoundingClientRect().left -
         document.getElementById("tabs")!.getBoundingClientRect().left;
     prevHighlightMarginLeft.value = highlightMarginLeft.value;
     prevHighlightWidth.value = highlightWidth.value;
-});
+};
 
 const tabHighlightStyles = computed(() => ({
     width: highlightWidth.value + "px",
