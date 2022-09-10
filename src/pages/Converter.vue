@@ -204,7 +204,7 @@ const sortNames = () => {
     names.value.sort((a, b) => chroma.distance(a.hex, hex.value) - chroma.distance(b.hex, hex.value));
 };
 const fetchNames = async () => {
-    const data = await fetch("/api/names.json");
+    const data = await fetch("/api/name.json");
     names.value = await data.json();
     updateColorName();
 };

@@ -68,13 +68,13 @@
                 <Button @click="textIn">Ok</Button>
             </div>
             <!-- TODO: DOESNT WORK -->
-            <!-- <Swatches
+            <Swatches
                 v-else
                 :type="sliderMode"
                 :trigger-sort="triggerSort"
                 :hex="chrome.hex()"
-                @change="textIn"
-            ></Swatches> -->
+                @change="applyHex"
+            ></Swatches>
         </div>
     </div>
 </template>
@@ -331,14 +331,17 @@ const sliderChanged = (value: ISliderCollectionChangeEventPayload) => {
 const textIn = () => {
     if (hexBoxValid.value) {
         let text = hexValue.value.replace(/(0[xX]|#)/, "");
-        let c = chroma(text);
-        let h = c.get("hsv.h");
-        _hsv.h = isNaN(h) ? 0 : h;
-        _hsv.s = c.get("hsv.s");
-        _hsv.v = c.get("hsv.v");
-        updateSlidersFromHSV();
-        changeEnd();
+        applyHex(text);
     }
+};
+const applyHex = (hex: string) => {
+    let c = chroma(hex);
+    let h = c.get("hsv.h");
+    _hsv.h = isNaN(h) ? 0 : h;
+    _hsv.s = c.get("hsv.s");
+    _hsv.v = c.get("hsv.v");
+    updateSlidersFromHSV();
+    changeEnd();
 };
 const checkHex = (value: string) => {
     if (value.startsWith("#")) {

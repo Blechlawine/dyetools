@@ -68,16 +68,16 @@ const swatchesRef = ref<HTMLElement | undefined>();
 
 const upperCase = computed(() => props.type !== "name");
 const first = computed(() => ({
-    name: upperCase.value ? swatches.value[0].name.toUpperCase() : swatches.value[0].name,
-    hex: swatches.value[0].hex,
+    name: upperCase.value ? swatches.value[0]?.name.toUpperCase() ?? "Loading..." : swatches.value[0].name,
+    hex: swatches.value[0]?.hex ?? "#fff",
 }));
 const second = computed(() => ({
-    name: upperCase.value ? swatches.value[1].name.toUpperCase() : swatches.value[1].name,
-    hex: swatches.value[1].hex,
+    name: upperCase.value ? swatches.value[1]?.name.toUpperCase() ?? "Loading..." : swatches.value[1].name,
+    hex: swatches.value[1]?.hex ?? "#fff",
 }));
 const third = computed(() => ({
-    name: upperCase.value ? swatches.value[2].name.toUpperCase() : swatches.value[2].name,
-    hex: swatches.value[2].hex,
+    name: upperCase.value ? swatches.value[2]?.name.toUpperCase() ?? "Loading..." : swatches.value[2].name,
+    hex: swatches.value[2]?.hex ?? "#fff",
 }));
 const firstStyle = computed(() => ({
     backgroundColor: `#${first.value.hex}`,
@@ -107,4 +107,86 @@ const swatchClick = (color: string) => {
     emit("change", color);
 };
 </script>
-<style scoped></style>
+<style scoped>
+.smolSwatches {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    grid-gap: 8px;
+}
+
+.smolSwatch {
+    /* z-index: 1; */
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+
+    border: 1px solid var(--light-gray);
+
+    position: relative;
+}
+
+.smolSwatch:hover > .swatchLabel {
+    opacity: 1;
+}
+
+.swatchLabel,
+.bigSwatchLabel {
+    z-index: 2;
+
+    background-color: var(--labelBackground);
+    border-radius: 6px;
+    padding: 4px;
+
+    width: min-Content;
+
+    text-align: center;
+
+    margin-left: 50%;
+
+    pointer-events: none;
+
+    transition: opacity 100ms;
+}
+
+.swatchLabel {
+    box-shadow: var(--shadow4px);
+    position: absolute;
+    transform: translate(-50%, -100%);
+    opacity: 0;
+}
+
+.bigSwatchLabel {
+    margin-top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.bigSwatches {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    grid-gap: 8px;
+
+    width: 100%;
+    height: calc(24px * 3 + 16px);
+
+    margin-bottom: 8px;
+}
+
+.swatch {
+    width: calc(24px * 3 + 16px);
+    height: 100%;
+
+    border-radius: 6px;
+}
+
+.swatches {
+    max-height: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+</style>
