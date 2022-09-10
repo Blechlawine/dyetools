@@ -65,9 +65,9 @@
     <div class="horizontalFlex" id="pickerBox">
         <div class="column">
             <ColorPickerBig
-                :hue="0"
-                :sat="0"
-                :val="0"
+                :hue="foregroundColor.h"
+                :sat="foregroundColor.s"
+                :val="foregroundColor.v"
                 id="foregroundPicker"
                 class="colorPickerBig"
                 @change="onForegroundColorChanged"
@@ -75,9 +75,9 @@
         </div>
         <div class="column">
             <ColorPickerBig
-                :hue="0"
-                :sat="0"
-                :val="1"
+                :hue="backgroundColor.h"
+                :sat="backgroundColor.s"
+                :val="backgroundColor.v"
                 id="backgroundPicker"
                 class="colorPickerBig"
                 @change="onBackgroundColorChanged"
@@ -86,15 +86,9 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, reactive } from "vue";
 import ColorPickerBig from "../components/picker/ColorPickerBig.vue";
 import chroma from "chroma-js";
-const foregroundHue = ref(0);
-const foregroundSat = ref(0);
-const foregroundVal = ref(0);
-const backgroundHue = ref(0);
-const backgroundSat = ref(0);
-const backgroundVal = ref(1);
 const quoteForeground = ref<IQuote | null>(null);
 const quoteBackground = ref<IQuote | null>(null);
 const AApass = ref(false);
@@ -102,15 +96,27 @@ const AAApass = ref(false);
 const AALargePass = ref(false);
 const AAALargePass = ref(false);
 
+const foregroundColor = reactive({
+    h: Math.random() * 360,
+    s: Math.random(),
+    v: Math.random(),
+});
+
+const backgroundColor = reactive({
+    h: Math.random() * 360,
+    s: Math.random(),
+    v: Math.random(),
+});
+
 const onForegroundColorChanged = ({ hue, sat, val }: { hue: number; sat: number; val: number }) => {
-    foregroundSat.value = sat;
-    foregroundHue.value = hue;
-    foregroundVal.value = val;
+    foregroundColor.h = sat;
+    foregroundColor.s = hue;
+    foregroundColor.v = val;
 };
 const onBackgroundColorChanged = ({ hue, sat, val }: { hue: number; sat: number; val: number }) => {
-    backgroundSat.value = sat;
-    backgroundHue.value = hue;
-    backgroundVal.value = val;
+    backgroundColor.h = sat;
+    backgroundColor.s = hue;
+    backgroundColor.v = val;
 };
 const getQuotes = async () => {
     // TODO: redo with new api
@@ -121,16 +127,16 @@ const getQuotes = async () => {
 };
 
 const foregroundColorText = computed(() => ({
-    color: chroma.hsv(foregroundHue.value, foregroundSat.value, foregroundVal.value).css(),
+    color: chroma.hsv(foregroundColor.h, foregroundColor.s, foregroundColor.v).css(),
 }));
 const backgroundColorText = computed(() => ({
-    color: chroma.hsv(backgroundHue.value, backgroundSat.value, backgroundVal.value).css(),
+    color: chroma.hsv(backgroundColor.h, backgroundColor.s, backgroundColor.v).css(),
 }));
 const foregroundColorBackground = computed(() => ({
-    "background-color": chroma.hsv(foregroundHue.value, foregroundSat.value, foregroundVal.value).css(),
+    "background-color": chroma.hsv(foregroundColor.h, foregroundColor.s, foregroundColor.v).css(),
 }));
 const backgroundColorBackground = computed(() => ({
-    "background-color": chroma.hsv(backgroundHue.value, backgroundSat.value, backgroundVal.value).css(),
+    "background-color": chroma.hsv(backgroundColor.h, backgroundColor.s, backgroundColor.v).css(),
 }));
 const aaColor = computed(() => ({
     color: AApass.value ? "#4CAF50" : "#E35141",
@@ -145,8 +151,8 @@ const aaaLargeColor = computed(() => ({
     color: AAALargePass.value ? "#4CAF50" : "#E35141",
 }));
 const score = computed(() => {
-    let rgb1 = chroma.hsv(backgroundHue.value, backgroundSat.value, backgroundVal.value);
-    let rgb2 = chroma.hsv(foregroundHue.value, foregroundSat.value, foregroundVal.value);
+    let rgb1 = chroma.hsv(backgroundColor.h, backgroundColor.s, backgroundColor.v);
+    let rgb2 = chroma.hsv(foregroundColor.h, foregroundColor.s, foregroundColor.v);
 
     const c1: { [k: string]: number } = {
         r: rgb1.get("rgb.r") / 255,
