@@ -86,7 +86,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, computed, reactive } from "vue";
+import { ref, computed, reactive, onMounted } from "vue";
 import ColorPickerBig from "../components/picker/ColorPickerBig.vue";
 import chroma from "chroma-js";
 const quoteForeground = ref<IQuote | null>(null);
@@ -95,6 +95,12 @@ const AApass = ref(false);
 const AAApass = ref(false);
 const AALargePass = ref(false);
 const AAALargePass = ref(false);
+
+const allQuotes = ref<IQuote[]>([]);
+
+onMounted(() => {
+    getQuotes();
+});
 
 const foregroundColor = reactive({
     h: Math.random() * 360,
@@ -119,11 +125,11 @@ const onBackgroundColorChanged = ({ hue, sat, val }: { hue: number; sat: number;
     backgroundColor.v = val;
 };
 const getQuotes = async () => {
-    // TODO: redo with new api
-    let data = await fetch("/api/quotes");
-    quoteForeground.value = await data.json();
-    let data2 = await fetch("/api/quotes");
-    quoteBackground.value = await data2.json();
+    if (allQuotes.value.length === 0) {
+        allQuotes.value = (await (await fetch("/api/quotes.json")).json()).data;
+    }
+    quoteForeground.value = allQuotes.value[Math.floor(Math.random() * allQuotes.value.length)];
+    quoteBackground.value = allQuotes.value[Math.floor(Math.random() * allQuotes.value.length)];
 };
 
 const foregroundColorText = computed(() => ({
