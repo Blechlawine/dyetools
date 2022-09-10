@@ -5,15 +5,15 @@
                 <span v-if="closable" class="material-icons" @click="emit('close')">close</span>
             </div>
             <SatValPicker
-                :saturation="sat"
-                :value="val"
-                :hue="hue"
-                @satValChanged="satValChanged"
+                :saturation="_hsv.s"
+                :value="_hsv.v"
+                :hue="_hsv.h"
+                @change="satValChanged"
                 @changeEnd="changeEnd"
             />
             <HueSlider
                 :handlePosition="hueSliderHandlePosition"
-                :model-value="hue"
+                :model-value="_hsv.h"
                 @update:model-value="hueChanged"
                 @changeEnd="changeEnd"
             />
@@ -29,36 +29,36 @@
             <!-- Slider Collection -->
             <RGBSliderCollection
                 v-if="sliderMode === 'rgb'"
-                :red="chrome.get('rgb.r')"
-                :green="chrome.get('rgb.g')"
-                :blue="chrome.get('rgb.b')"
+                :red="_rgb.r"
+                :green="_rgb.g"
+                :blue="_rgb.b"
                 @change="sliderChanged"
                 @change-end="changeEnd"
             ></RGBSliderCollection>
             <CMYKSliderCollection
                 v-else-if="sliderMode === 'cmyk'"
-                :cyan="chrome.get('cmyk.c') * 100"
-                :magenta="chrome.get('cmyk.m') * 100"
-                :yellow="chrome.get('cmyk.y') * 100"
-                :k="chrome.get('cmyk.k') * 100"
+                :cyan="_cmyk.c * 100"
+                :magenta="_cmyk.m * 100"
+                :yellow="_cmyk.y * 100"
+                :k="_cmyk.k * 100"
                 @change="sliderChanged"
                 @change-end="changeEnd"
             >
             </CMYKSliderCollection>
             <HSLSliderCollection
                 v-else-if="sliderMode === 'hsl'"
-                :hue="chrome.get('hsl.h')"
-                :saturation="chrome.get('hsl.s') * 100"
-                :lightness="chrome.get('hsl.l') * 100"
+                :hue="isNaN(_hsl.h) ? 0 : _hsl.h"
+                :saturation="_hsl.s * 100"
+                :lightness="_hsl.l * 100"
                 @change="sliderChanged"
                 @change-end="changeEnd"
             >
             </HSLSliderCollection>
             <LABSliderCollection
                 v-else-if="sliderMode === 'lab'"
-                :l="chrome.get('lab.l')"
-                :a="chrome.get('lab.a')"
-                :b="chrome.get('lab.b')"
+                :l="_lab.l"
+                :a="_lab.a"
+                :b="_lab.b"
                 @change="sliderChanged"
                 @change-end="changeEnd"
             >
@@ -93,7 +93,7 @@ import HSLSliderCollection from "../inputs/slider/collections/HSLSliderCollectio
 import LABSliderCollection from "../inputs/slider/collections/LABSliderCollection.vue";
 import Swatches from "./Swatches.vue";
 import chroma from "chroma-js";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, nextTick, onMounted, reactive, ref, watch, WritableComputedRef } from "vue";
 
 const sliderModes = ["RGB", "HSL", "CMYK", "LAB", "Copic", "RAL", "HKS", "Name", "HEX", "Pantone"];
 interface ISliderCollectionChangeEventPayload {
@@ -118,15 +118,15 @@ const emit = defineEmits<{
 }>();
 
 const props = defineProps({
-    hueIn: {
+    hue: {
         type: Number,
         default: 0,
     },
-    satIn: {
+    sat: {
         type: Number,
         default: 1,
     },
-    valIn: {
+    val: {
         type: Number,
         default: 1,
     },
@@ -140,51 +140,73 @@ const props = defineProps({
     },
 });
 
+const _rgb = reactive({
+    r: chroma.hsv(props.hue, props.sat, props.val).get("rgb.r"),
+    g: chroma.hsv(props.hue, props.sat, props.val).get("rgb.g"),
+    b: chroma.hsv(props.hue, props.sat, props.val).get("rgb.b"),
+});
+const _hsl = reactive({
+    h: chroma.hsv(props.hue, props.sat, props.val).get("hsl.h"),
+    s: chroma.hsv(props.hue, props.sat, props.val).get("hsl.s"),
+    l: chroma.hsv(props.hue, props.sat, props.val).get("hsl.l"),
+});
+const _hsv = reactive({
+    h: props.hue,
+    s: props.sat,
+    v: props.val,
+});
+const _cmyk = reactive({
+    c: chroma.hsv(props.hue, props.sat, props.val).get("cmyk.c"),
+    m: chroma.hsv(props.hue, props.sat, props.val).get("cmyk.m"),
+    y: chroma.hsv(props.hue, props.sat, props.val).get("cmyk.y"),
+    k: chroma.hsv(props.hue, props.sat, props.val).get("cmyk.k"),
+});
+const _lab = reactive({
+    l: chroma.hsv(props.hue, props.sat, props.val).get("lab.l"),
+    a: chroma.hsv(props.hue, props.sat, props.val).get("lab.a"),
+    b: chroma.hsv(props.hue, props.sat, props.val).get("lab.b"),
+});
+
 watch(
-    () => props.hueIn,
+    () => [props.hue, props.sat, props.val],
     () => {
-        hue.value = props.hueIn;
         triggerSort.value++;
-    }
-);
-watch(
-    () => props.satIn,
-    () => {
-        sat.value = props.satIn;
-        triggerSort.value++;
-    }
-);
-watch(
-    () => props.valIn,
-    () => {
-        val.value = props.valIn;
-        triggerSort.value++;
+    },
+    {
+        deep: true,
     }
 );
 
 const hueSliderHandlePosition = ref(0);
-const satValPickerPosX = ref(0);
-const satValPickerPosY = ref(0);
-
 const winHeight = ref(0);
-const hue = ref(props.hueIn);
-const sat = ref(props.satIn);
-const val = ref(props.valIn);
 const activeMode = ref(0);
 const hexBoxValid = ref(true);
 const triggerSort = ref(0);
 
 const sliderMode = computed(() => sliderModes[activeMode.value].toLowerCase());
-const chrome = computed(() => chroma.hsv(hue.value, sat.value, val.value));
+const chrome = computed(() => {
+    switch (sliderMode.value) {
+        case "hsl":
+            return chroma.hsl(_hsl.h, _hsl.s, _hsl.l);
+        case "cmyk":
+            return chroma.cmyk(_cmyk.c, _cmyk.m, _cmyk.y, _cmyk.k);
+        case "rgb":
+            return chroma.rgb(_rgb.r, _rgb.g, _rgb.b);
+        case "lab":
+            return chroma.lab(_lab.l, _lab.a, _lab.b);
+        default:
+            return chroma.hsv(props.hue, props.sat, props.val);
+    }
+});
 const copyValue = computed(() => {
     if (sliderMode.value === "rgb") {
-        return chroma.hsv(hue.value, sat.value, val.value).css();
+        return chrome.value.css();
     } else if (sliderMode.value === "hsl") {
-        let hslSat = Math.round(chroma.hsv(hue.value, sat.value, val.value).get("hsl.s") * 100);
-        let hslLig = Math.round(chroma.hsv(hue.value, sat.value, val.value).get("hsl.l") * 100);
-        return `hsl(${Math.round(hue.value)}, ${hslSat}%, ${hslLig}%)`;
+        let hslSat = Math.round(chrome.value.get("hsl.s") * 100);
+        let hslLig = Math.round(chrome.value.get("hsl.l") * 100);
+        return `hsl(${Math.round(_hsl.h)}, ${hslSat}%, ${hslLig}%)`;
     } else {
-        return chroma.hsv(hue.value, sat.value, val.value).hex().toUpperCase();
+        return chrome.value.hex().toUpperCase();
     }
 });
 const colorPickerResponsiveStyles = computed(() => ({
@@ -197,53 +219,104 @@ const topBottomResponsiveStyles = computed(() => ({
 }));
 
 onMounted(() => {
-    emit("colorChange", {
-        hue: hue.value,
-        sat: sat.value,
-        val: val.value,
-    });
     winHeight.value = window.innerHeight;
     window.addEventListener("resize", () => {
         winHeight.value = window.innerHeight;
     });
 });
 
-const hueChanged = (h: number) => {
-    hue.value = Math.round(h);
+const updateSlidersFromHSV = () => {
+    let c = chroma.hsv(_hsv.h, _hsv.s, _hsv.v);
+    // RGB
+    _rgb.r = c.get("rgb.r");
+    _rgb.g = c.get("rgb.g");
+    _rgb.b = c.get("rgb.b");
+    // HSL
+    _hsl.h = c.get("hsl.h");
+    _hsl.s = c.get("hsl.s");
+    _hsl.l = c.get("hsl.l");
+    // CMYK
+    _cmyk.c = c.get("cmyk.c");
+    _cmyk.m = c.get("cmyk.m");
+    _cmyk.y = c.get("cmyk.y");
+    _cmyk.k = c.get("cmyk.k");
+    // LAB
+    _lab.l = c.get("lab.l");
+    _lab.a = c.get("lab.a");
+    _lab.b = c.get("lab.b");
+    console.log(_rgb);
     emit("colorChange", {
-        hue: hue.value,
-        sat: sat.value,
-        val: val.value,
+        hue: _hsv.h,
+        sat: _hsv.s,
+        val: _hsv.v,
     });
 };
-const satValChanged = (s: number, v: number) => {
-    sat.value = s;
-    val.value = v;
-    emit("colorChange", {
-        hue: hue.value,
-        sat: sat.value,
-        val: val.value,
-    });
+
+const hueChanged = (h: number) => {
+    _hsv.h = Math.round(h);
+    nextTick(updateSlidersFromHSV);
+};
+const satValChanged = ({ s, v }: { s: number; v: number }) => {
+    _hsv.s = s;
+    _hsv.v = v;
+    nextTick(updateSlidersFromHSV);
 };
 const sliderChanged = (value: ISliderCollectionChangeEventPayload) => {
-    let chrome: chroma.Color | null = null;
-    if (value.red != undefined && value.green != undefined && value.blue != undefined) {
-        chrome = chroma.rgb(value.red, value.green, value.blue);
-    } else if (value.hue != undefined && value.saturation != undefined && value.lightness != undefined) {
-        chrome = chroma.hsl(value.hue, value.saturation / 100, value.lightness / 100);
-    } else if (value.c != undefined && value.m != undefined && value.y != undefined && value.k != undefined) {
-        chrome = chroma.cmyk(value.c / 100, value.m / 100, value.y / 100, value.k / 100);
-    } else if (value.l != undefined && value.a != undefined && value.b != undefined) {
-        chrome = chroma.lab(value.l, value.a, value.b);
+    if (value.red !== undefined && value.green !== undefined && value.blue !== undefined) {
+        _rgb.r = value.red;
+        _rgb.g = value.green;
+        _rgb.b = value.blue;
+    } else if (value.hue !== undefined && value.saturation !== undefined && value.lightness !== undefined) {
+        _hsl.h = value.hue;
+        _hsl.s = value.saturation / 100;
+        _hsl.l = value.lightness / 100;
+    } else if (value.c !== undefined && value.m !== undefined && value.y !== undefined && value.k !== undefined) {
+        _cmyk.c = value.c / 100;
+        _cmyk.m = value.m / 100;
+        _cmyk.y = value.y / 100;
+        _cmyk.k = value.k / 100;
+    } else if (value.l !== undefined && value.a !== undefined && value.b !== undefined) {
+        _lab.l = value.l;
+        _lab.a = value.a;
+        _lab.b = value.b;
     }
-    let h = chrome?.get("hsv.h");
-    hue.value = (isNaN(h ?? 0) ? 0 : h) ?? hue.value;
-    sat.value = chrome?.get("hsv.s") ?? sat.value;
-    val.value = chrome?.get("hsv.v") ?? val.value;
+    let h = chrome.value.get("hsv.h");
+    _hsv.h = (isNaN(h ?? 0) ? 0 : h) ?? _hsv.h;
+    _hsv.s = chrome.value.get("hsv.s") ?? _hsv.s;
+    _hsv.v = chrome.value.get("hsv.v") ?? _hsv.v;
+    if (sliderMode.value !== "rgb") {
+        // RGB
+        _rgb.r = chrome.value.get("rgb.r");
+        _rgb.g = chrome.value.get("rgb.g");
+        _rgb.b = chrome.value.get("rgb.b");
+    }
+    if (sliderMode.value !== "hsl") {
+        // HSL
+        _hsl.h = chrome.value.get("hsl.h");
+        _hsl.s = chrome.value.get("hsl.s");
+        _hsl.l = chrome.value.get("hsl.l");
+    }
+    if (sliderMode.value !== "cmyk") {
+        // CMYK
+        _cmyk.c = chrome.value.get("cmyk.c");
+        _cmyk.m = chrome.value.get("cmyk.m");
+        _cmyk.y = chrome.value.get("cmyk.y");
+        _cmyk.k = chrome.value.get("cmyk.k");
+    }
+    if (sliderMode.value !== "lab") {
+        // LAB
+        _lab.l = chrome.value.get("lab.l");
+        _lab.a = chrome.value.get("lab.a");
+        _lab.b = chrome.value.get("lab.b");
+    }
+    // HSV
+    _hsv.h = chrome.value.get("hsv.h");
+    _hsv.s = chrome.value.get("hsv.s");
+    _hsv.v = chrome.value.get("hsv.v");
     emit("colorChange", {
-        hue: hue.value,
-        sat: sat.value,
-        val: val.value,
+        hue: _hsv.h,
+        sat: _hsv.s,
+        val: _hsv.v,
     });
 };
 const textIn = (value: string) => {
@@ -252,14 +325,9 @@ const textIn = (value: string) => {
         let text = value.replace(/(0[xX]|#)/, "");
         let chrome = chroma(text);
         let h = chrome.get("hsv.h");
-        hue.value = isNaN(h) ? 0 : h;
-        sat.value = chrome.get("hsv.s");
-        val.value = chrome.get("hsv.v");
-        emit("colorChange", {
-            hue: hue.value,
-            sat: sat.value,
-            val: val.value,
-        });
+        _hsv.h = isNaN(h) ? 0 : h;
+        _hsv.s = chrome.get("hsv.s");
+        _hsv.v = chrome.get("hsv.v");
         changeEnd();
     }
 };

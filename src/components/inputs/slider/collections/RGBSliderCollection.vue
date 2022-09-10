@@ -73,7 +73,7 @@ const green: WritableComputedRef<number> = computed({
     set: (g) => emit("change", { red: red.value, green: g, blue: blue.value }),
 });
 const blue: WritableComputedRef<number> = computed({
-    get: () => props.red,
+    get: () => props.blue,
     set: (b) => emit("change", { red: red.value, green: green.value, blue: b }),
 });
 </script>

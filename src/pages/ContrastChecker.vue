@@ -59,9 +59,9 @@
     <div class="horizontalFlex" id="pickerBox">
         <div class="column">
             <ColorPickerBig
-                :hueIn="0"
-                :satIn="0"
-                :valIn="0"
+                :hue="0"
+                :sat="0"
+                :val="0"
                 id="foregroundPicker"
                 class="colorPickerBig"
                 @colorChange="onForegroundColorChanged"
@@ -69,9 +69,9 @@
         </div>
         <div class="column">
             <ColorPickerBig
-                :hueIn="0"
-                :satIn="0"
-                :valIn="1"
+                :hue="0"
+                :sat="0"
+                :val="1"
                 id="backgroundPicker"
                 class="colorPickerBig"
                 @colorChange="onBackgroundColorChanged"

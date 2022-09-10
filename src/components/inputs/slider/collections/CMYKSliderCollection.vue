@@ -105,11 +105,11 @@ const _cyan: WritableComputedRef<number> = computed({
     set: (c) => emit("change", { c, m: _magenta.value, y: _yellow.value, k: _key.value }),
 });
 const _magenta: WritableComputedRef<number> = computed({
-    get: () => props.cyan,
+    get: () => props.magenta,
     set: (m) => emit("change", { c: _cyan.value, m, y: _yellow.value, k: _key.value }),
 });
 const _yellow: WritableComputedRef<number> = computed({
-    get: () => props.cyan,
+    get: () => props.yellow,
     set: (y) => emit("change", { c: _cyan.value, m: _magenta.value, y, k: _key.value }),
 });
 const _key: WritableComputedRef<number> = computed({

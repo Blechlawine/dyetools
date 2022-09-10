@@ -9,8 +9,8 @@ import { computed, onMounted, ref, VNodeRef, watch } from "vue";
 import { scale } from "../../utils";
 
 const emit = defineEmits<{
-    (e: "changeEnd", saturation: number, value: number): void;
-    (e: "satValChanged", saturation: number, value: number): void;
+    (e: "changeEnd", value: {s: number, v: number}): void;
+    (e: "change", value: {s: number; v: number}): void;
 }>();
 
 const props = defineProps({
@@ -94,7 +94,7 @@ const handleMouseMove = (event: MouseEvent) => {
 const handleMouseUp = (event: MouseEvent) => {
     document.removeEventListener("mousemove", handleMouseMove);
     document.removeEventListener("mouseup", handleMouseUp);
-    emit("changeEnd", sat.value, val.value);
+    emit("changeEnd", { s: sat.value, v: val.value });
 };
 const handleTouchStart = (event: TouchEvent) => {
     document.addEventListener("touchmove", handleTouchMove);
@@ -123,12 +123,12 @@ const handleTouchEnd = (event: TouchEvent) => {
     document.removeEventListener("touchmove", handleTouchMove);
     document.removeEventListener("touchend", handleTouchEnd);
     document.removeEventListener("touchcancel", handleTouchEnd);
-    emit("changeEnd", sat.value, val.value);
+    emit("changeEnd", { s: sat.value, v: val.value });
 };
 const setHandlePos = (x: number, y: number) => {
     sat.value = scale(x, minX.value, maxX.value, 0, 1);
     val.value = scale(y, maxY.value, minY.value, 0, 1);
-    emit("satValChanged", sat.value, val.value);
+    emit("change", { s: sat.value, v: val.value });
 };
 </script>
 <style scoped>
