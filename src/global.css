@@ -1,27 +1,39 @@
 /* TODO: serve these fonts locally */
-@import url('https://fonts.googleapis.com/css2?family=Material+Icons');
-@import url('https://fonts.googleapis.com/css2?family=Material+Icons+Outlined');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Material+Icons");
+@import url("https://fonts.googleapis.com/css2?family=Material+Icons+Outlined");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
 
-:root {
+:root[data-theme="dark"] {
+    --background: #171717;
+    --light-gray: #242424;
+    --middle-gray: #303030;
+    --shadow: rgba(0, 0, 0, 0.28);
+    --textColorDark: var(--text-white);
+    --textColorLight: var(--text-dark);
+}
+
+:root[data-theme="light"] {
+    --background: white;
+    --light-gray: #e9e9e9;
+    --middle-gray: #959595;
+    --shadow: rgba(97, 97, 97, 0.18);
     --textColorDark: var(--text-dark);
     --textColorLight: var(--text-light);
-    --light-gray: #E9E9E9;
-    --middle-gray: #959595;
-    --accent: #00BCD4;
-    --light-accent: #9BF4FF;
-    --warning-red: rgb(244,67,54);
-    --gray: #BBBBBB;
-    --shadow: rgba(97, 97, 97, 0.18);
-    --background: white;
+}
+
+:root {
+    --accent: #00bcd4;
+    --light-accent: #9bf4ff;
+    --warning-red: rgb(244, 67, 54);
+    --gray: #bbbbbb;
     --labelBackground: var(--background);
 
     /* mode-unabhängig */
-    --white: #FFFFFF;
-    --text-dark: #2E2E2E;
-    --text-white: #FFFFFF;
-    --text-white-inactive: #EBEBEB;
-    --text-dark-inactive: #3B3B3B;
+    --white: #ffffff;
+    --text-dark: #2e2e2e;
+    --text-white: #ffffff;
+    --text-white-inactive: #ebebeb;
+    --text-dark-inactive: #3b3b3b;
 
     /* Schatten */
     --shadow4px: 0 2px 4px var(--shadow), 0 4px 8px var(--shadow);

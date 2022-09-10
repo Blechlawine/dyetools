@@ -14,28 +14,21 @@ const root = ref<HTMLElement | null>(null);
 
 onMounted(() => {
     root.value = document.documentElement;
+    if (darkMode.value) {
+        root.value.dataset.theme = "dark";
+    } else {
+        root.value.dataset.theme = "light";
+    }
 });
 
-watch(
-    () => darkMode,
-    () => {
-        if (darkMode) {
-            root.value?.style.setProperty("--background", "#171717");
-            root.value?.style.setProperty("--light-gray", "#242424");
-            root.value?.style.setProperty("--middle-gray", "#303030");
-            root.value?.style.setProperty("--shadow", "rgba(0, 0, 0, 0.28)");
-            root.value?.style.setProperty("--textColorDark", "var(--text-white)");
-            root.value?.style.setProperty("--textColorLight", "var(--text-dark)");
-        } else {
-            root.value?.style.setProperty("--background", "");
-            root.value?.style.setProperty("--light-gray", "");
-            root.value?.style.setProperty("--middle-gray", "");
-            root.value?.style.setProperty("--textColorDark", "");
-            root.value?.style.setProperty("--textColorLight", "");
-            root.value?.style.setProperty("--shadow", "");
-        }
+watch(darkMode, () => {
+    if (!root.value) return;
+    if (darkMode.value) {
+        root.value.dataset.theme = "dark";
+    } else {
+        root.value.dataset.theme = "light";
     }
-);
+});
 
 const thumbStyle = computed(() => ({
     "background-color": darkMode.value ? "var(--accent)" : "var(--middle-gray)",
