@@ -64,11 +64,7 @@
             >
             </LABSliderCollection>
             <div class="horizontalFlex" v-else-if="sliderMode === 'hex'">
-                <TextInput
-                    placeholder="#FFFFFF"
-                    :valid="hexBoxValid"
-                    v-model="hexValue"
-                ></TextInput>
+                <TextInput placeholder="#FFFFFF" :valid="hexBoxValid" v-model="hexValue"></TextInput>
                 <Button @click="textIn">Ok</Button>
             </div>
             <!-- TODO: DOESNT WORK -->
@@ -114,7 +110,7 @@ interface ISliderCollectionChangeEventPayload {
     b?: number;
 }
 const emit = defineEmits<{
-    (e: "colorChange", color: { hue: number; sat: number; val: number }): void;
+    (e: "change", color: { hue: number; sat: number; val: number }): void;
     (e: "changeEnd"): void;
     (e: "close"): void;
 }>();
@@ -172,6 +168,10 @@ const _lab = reactive({
 watch(
     () => [props.hue, props.sat, props.val],
     () => {
+        _hsv.h = props.hue;
+        _hsv.s = props.sat;
+        _hsv.v = props.val;
+        updateSlidersFromHSV();
         triggerSort.value++;
     },
     {
@@ -250,9 +250,9 @@ const updateSlidersFromHSV = () => {
     _lab.l = c.get("lab.l");
     _lab.a = c.get("lab.a");
     _lab.b = c.get("lab.b");
-    
+
     hexValue.value = c.hex().toUpperCase();
-    emit("colorChange", {
+    emit("change", {
         hue: _hsv.h,
         sat: _hsv.s,
         val: _hsv.v,
@@ -321,7 +321,7 @@ const sliderChanged = (value: ISliderCollectionChangeEventPayload) => {
     _hsv.h = chrome.value.get("hsv.h");
     _hsv.s = chrome.value.get("hsv.s");
     _hsv.v = chrome.value.get("hsv.v");
-    emit("colorChange", {
+    emit("change", {
         hue: _hsv.h,
         sat: _hsv.s,
         val: _hsv.v,

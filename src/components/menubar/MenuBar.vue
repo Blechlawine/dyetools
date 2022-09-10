@@ -1,7 +1,10 @@
 <template>
     <header>
         <div class="top">
-            <p>Dyetools</p>
+            <span class="title">
+                <img class="logo" src="/favicon.png" alt="Dyetools logo" />
+                <p>Dyetools</p>
+            </span>
 
             <div class="rightStuff">
                 <ToggleSwitch></ToggleSwitch>
@@ -52,6 +55,22 @@ header .bottom {
     align-items: center;
     justify-content: center;
     grid-gap: 12px;
+}
+
+.title {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.title p {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.logo {
+    height: 36px;
+    aspect-ratio: 1/1;
 }
 
 @media all and (min-width: 600px) {

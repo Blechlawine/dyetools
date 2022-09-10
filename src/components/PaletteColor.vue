@@ -35,7 +35,7 @@
             :satIn="chroma(color.hex).get('hsv.s')"
             :valIn="chroma(color.hex).get('hsv.v')"
             class="colorPickerBig"
-            @colorChange="emit('edit', color, $event)"
+            @change="emit('edit', color, $event)"
             @close="emit('togglePicker')"
             v-if="pickerOpen"
         />

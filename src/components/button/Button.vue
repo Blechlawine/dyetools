@@ -1,5 +1,5 @@
 <template>
-    <button :class="classes" @click="$emit('click', $event)">
+    <button :class="classes">
         <slot></slot>
     </button>
 </template>
@@ -7,9 +7,6 @@
 import { computed } from "vue";
 
 const props = defineProps({
-    label: {
-        type: String,
-    },
     variant: {
         type: String,
         default: "secondary",

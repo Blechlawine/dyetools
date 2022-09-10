@@ -1,4 +1,10 @@
 <template>
+    <teleport to="head">
+        <meta name="description" content="Check your colors for AA and AAA compatibility" />
+        <meta property="og:description" content="Check your colors for AA and AAA compatibility" />
+        <meta property="og:title" content="Dyetools - Contrast checker" />
+        <title>Dyetools - Contrast checker</title>
+    </teleport>
     <div class="column">
         <h1 id="score">{{ score.toString().substring(0, 4) }}</h1>
 
@@ -64,7 +70,7 @@
                 :val="0"
                 id="foregroundPicker"
                 class="colorPickerBig"
-                @colorChange="onForegroundColorChanged"
+                @change="onForegroundColorChanged"
             />
         </div>
         <div class="column">
@@ -74,7 +80,7 @@
                 :val="1"
                 id="backgroundPicker"
                 class="colorPickerBig"
-                @colorChange="onBackgroundColorChanged"
+                @change="onBackgroundColorChanged"
             />
         </div>
     </div>
