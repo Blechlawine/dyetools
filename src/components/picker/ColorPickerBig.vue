@@ -63,13 +63,14 @@
                 @change-end="changeEnd"
             >
             </LABSliderCollection>
-            <TextInput
-                v-else-if="sliderMode === 'hex'"
-                placeholder="#FFFFFF"
-                :valid="hexBoxValid"
-                :model-value="chrome.hex().toUpperCase()"
-                @update:model-value="textIn"
-            ></TextInput>
+            <div class="horizontalFlex" v-else-if="sliderMode === 'hex'">
+                <TextInput
+                    placeholder="#FFFFFF"
+                    :valid="hexBoxValid"
+                    v-model="hexValue"
+                ></TextInput>
+                <Button @click="textIn">Ok</Button>
+            </div>
             <!-- TODO: DOESNT WORK -->
             <!-- <Swatches
                 v-else
@@ -87,6 +88,7 @@ import CopyField from "../inputs/CopyField.vue";
 import SatValPicker from "./SatValPicker.vue";
 import HueSlider from "../inputs/slider/HueSlider.vue";
 import TextInput from "../inputs/TextInput.vue";
+import Button from "../button/Button.vue";
 import RGBSliderCollection from "../inputs/slider/collections/RGBSliderCollection.vue";
 import CMYKSliderCollection from "../inputs/slider/collections/CMYKSliderCollection.vue";
 import HSLSliderCollection from "../inputs/slider/collections/HSLSliderCollection.vue";
@@ -180,10 +182,12 @@ watch(
 const hueSliderHandlePosition = ref(0);
 const winHeight = ref(0);
 const activeMode = ref(0);
-const hexBoxValid = ref(true);
 const triggerSort = ref(0);
 
+const hexBoxValid = computed(() => checkHex(hexValue.value));
+
 const sliderMode = computed(() => sliderModes[activeMode.value].toLowerCase());
+
 const chrome = computed(() => {
     switch (sliderMode.value) {
         case "hsl":
@@ -198,6 +202,8 @@ const chrome = computed(() => {
             return chroma.hsv(props.hue, props.sat, props.val);
     }
 });
+
+const hexValue = ref(chrome.value.hex());
 const copyValue = computed(() => {
     if (sliderMode.value === "rgb") {
         return chrome.value.css();
@@ -206,7 +212,7 @@ const copyValue = computed(() => {
         let hslLig = Math.round(chrome.value.get("hsl.l") * 100);
         return `hsl(${Math.round(_hsl.h)}, ${hslSat}%, ${hslLig}%)`;
     } else {
-        return chrome.value.hex().toUpperCase();
+        return hexValue.value.toUpperCase();
     }
 });
 const colorPickerResponsiveStyles = computed(() => ({
@@ -244,7 +250,8 @@ const updateSlidersFromHSV = () => {
     _lab.l = c.get("lab.l");
     _lab.a = c.get("lab.a");
     _lab.b = c.get("lab.b");
-    console.log(_rgb);
+    
+    hexValue.value = c.hex().toUpperCase();
     emit("colorChange", {
         hue: _hsv.h,
         sat: _hsv.s,
@@ -284,6 +291,7 @@ const sliderChanged = (value: ISliderCollectionChangeEventPayload) => {
     _hsv.h = (isNaN(h ?? 0) ? 0 : h) ?? _hsv.h;
     _hsv.s = chrome.value.get("hsv.s") ?? _hsv.s;
     _hsv.v = chrome.value.get("hsv.v") ?? _hsv.v;
+    hexValue.value = chrome.value.hex().toUpperCase();
     if (sliderMode.value !== "rgb") {
         // RGB
         _rgb.r = chrome.value.get("rgb.r");
@@ -319,15 +327,15 @@ const sliderChanged = (value: ISliderCollectionChangeEventPayload) => {
         val: _hsv.v,
     });
 };
-const textIn = (value: string) => {
-    hexBoxValid.value = checkHex(value);
+const textIn = () => {
     if (hexBoxValid.value) {
-        let text = value.replace(/(0[xX]|#)/, "");
-        let chrome = chroma(text);
-        let h = chrome.get("hsv.h");
+        let text = hexValue.value.replace(/(0[xX]|#)/, "");
+        let c = chroma(text);
+        let h = c.get("hsv.h");
         _hsv.h = isNaN(h) ? 0 : h;
-        _hsv.s = chrome.get("hsv.s");
-        _hsv.v = chrome.get("hsv.v");
+        _hsv.s = c.get("hsv.s");
+        _hsv.v = c.get("hsv.v");
+        updateSlidersFromHSV();
         changeEnd();
     }
 };
@@ -335,7 +343,7 @@ const checkHex = (value: string) => {
     if (value.startsWith("#")) {
         value = value.substring(1);
     }
-    return !/^(0[xX]|#|)([a-fA-F0-9]{6})$/.test(value);
+    return !/^(0[xX]|#|)([a-fA-F0-9]{7})$/.test(value);
 };
 const changeEnd = () => {
     triggerSort.value++;
