@@ -171,7 +171,7 @@ watch(
         _hsv.h = props.hue;
         _hsv.s = props.sat;
         _hsv.v = props.val;
-        updateSlidersFromHSV();
+        updateSlidersFromHSV(false);
         triggerSort.value++;
     },
     {
@@ -231,7 +231,7 @@ onMounted(() => {
     });
 });
 
-const updateSlidersFromHSV = () => {
+const updateSlidersFromHSV = (emitEvent: boolean = true) => {
     let c = chroma.hsv(_hsv.h, _hsv.s, _hsv.v);
     // RGB
     _rgb.r = c.get("rgb.r");
@@ -252,6 +252,7 @@ const updateSlidersFromHSV = () => {
     _lab.b = c.get("lab.b");
 
     hexValue.value = c.hex().toUpperCase();
+    if (!emitEvent) return;
     emit("change", {
         hue: _hsv.h,
         sat: _hsv.s,
