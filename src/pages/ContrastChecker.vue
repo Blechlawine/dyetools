@@ -89,7 +89,6 @@
 import { ref, computed } from "vue";
 import ColorPickerBig from "../components/picker/ColorPickerBig.vue";
 import chroma from "chroma-js";
-const colorsDropdown = ["RGB", "HSL", "CMYK", "LAB", "XYZ", "Copic", "RAL", "HKS", "Name", "HEX", "Picker"];
 const foregroundHue = ref(0);
 const foregroundSat = ref(0);
 const foregroundVal = ref(0);
@@ -98,7 +97,6 @@ const backgroundSat = ref(0);
 const backgroundVal = ref(1);
 const quoteForeground = ref<IQuote | null>(null);
 const quoteBackground = ref<IQuote | null>(null);
-const scoreValue = ref(210201201);
 const AApass = ref(false);
 const AAApass = ref(false);
 const AALargePass = ref(false);
@@ -135,16 +133,16 @@ const backgroundColorBackground = computed(() => ({
     "background-color": chroma.hsv(backgroundHue.value, backgroundSat.value, backgroundVal.value).css(),
 }));
 const aaColor = computed(() => ({
-    color: AApass ? "#4CAF50" : "#E35141",
+    color: AApass.value ? "#4CAF50" : "#E35141",
 }));
 const aaaColor = computed(() => ({
-    color: AAApass ? "#4CAF50" : "#E35141",
+    color: AAApass.value ? "#4CAF50" : "#E35141",
 }));
 const aaLargeColor = computed(() => ({
-    color: AALargePass ? "#4CAF50" : "#E35141",
+    color: AALargePass.value ? "#4CAF50" : "#E35141",
 }));
 const aaaLargeColor = computed(() => ({
-    color: AAALargePass ? "#4CAF50" : "#E35141",
+    color: AAALargePass.value ? "#4CAF50" : "#E35141",
 }));
 const score = computed(() => {
     let rgb1 = chroma.hsv(backgroundHue.value, backgroundSat.value, backgroundVal.value);
