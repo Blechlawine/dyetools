@@ -50,6 +50,10 @@ const props = defineProps({
         type: String,
         default: "#FFFFFF",
     },
+    coloredBackground: {
+        type: Boolean,
+        default: false,
+    },
     background: {
         type: String,
         default: "#FFFFFF",
@@ -61,10 +65,10 @@ const value = computed({
     set: (v: number) => emit("update:modelValue", v),
 });
 const textStyle = computed(() => ({
-    color: chroma(props.background).luminance() < 0.5 ? "white" : "black",
+    color: props.coloredBackground ? (chroma(props.background).luminance() < 0.5 ? "white" : "black") : "var(--textColorDark)",
 }));
 const backgroundStyle = computed(() => ({
-    background: props.background,
+    background: props.coloredBackground ? props.background : "var(--background)",
 }));
 </script>
 <style scoped>
