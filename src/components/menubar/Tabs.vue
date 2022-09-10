@@ -1,45 +1,41 @@
 <template>
     <div id="tabsWrapper">
         <div id="tabHighlight" :style="tabHighlightStyles"></div>
-        <div id="tabs">
-            <router-link
-                v-for="(route, index) in routes"
-                :key="index"
-                :to="route.path"
-                class="tab"
-                :id="Router.currentRoute.value.path === route.path ? 'activeTab' : ''"
-            >
-                {{ route.name }}
-            </router-link>
+        <div id="tabs" ref="tabsRef">
+            <span v-for="(route, index) in routes" :key="index" ref="linksRef" class="tab" :data-link="route.path">
+                <router-link :to="route.path" active-class="activeTab">
+                    {{ route.name }}
+                </router-link>
+            </span>
         </div>
     </div>
 </template>
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, nextTick, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import routes from "../../routes";
+import { prevHighlightMarginLeft, prevHighlightWidth } from "../../stores/store";
 
 const Router = useRouter();
 
 const highlightWidth = ref(0);
-const prevHighlightWidth = ref(0);
 const highlightMarginLeft = ref(0);
-const prevHighlightMarginLeft = ref(0);
+const linksRef = ref<HTMLSpanElement[]>([]);
+const tabsRef = ref<HTMLElement | undefined>(undefined);
 
-watch(
-    () => Router.currentRoute.value,
-    () => updateHighlight()
-);
+Router.afterEach((to, from) => {
+    nextTick(updateHighlight);
+});
 
 onMounted(() => {
     updateHighlight();
 });
 
 const updateHighlight = () => {
-    highlightWidth.value = document.getElementById("activeTab")!.clientWidth;
+    highlightWidth.value = linksRef.value.find(lr => lr.dataset.link === Router.currentRoute.value.path)!.clientWidth;
     highlightMarginLeft.value =
-        document.getElementById("activeTab")!.getBoundingClientRect().left -
-        document.getElementById("tabs")!.getBoundingClientRect().left;
+        linksRef.value.find(lr => lr.dataset.link === Router.currentRoute.value.path)!.getBoundingClientRect().left -
+        tabsRef.value!.getBoundingClientRect().left;
     prevHighlightMarginLeft.value = highlightMarginLeft.value;
     prevHighlightWidth.value = highlightWidth.value;
 };
@@ -69,7 +65,7 @@ const tabHighlightStyles = computed(() => ({
     z-index: 2;
 }
 
-#activeTab {
+.activeTab {
     color: var(--text-white);
 }
 
