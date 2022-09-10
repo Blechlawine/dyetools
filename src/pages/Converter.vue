@@ -108,9 +108,9 @@ onMounted(() => {
 });
 
 const hsv = reactive({
-    h: 0,
-    s: 0,
-    v: 0,
+    h: Math.random() * 360,
+    s: Math.random(),
+    v: Math.random(),
 });
 const names = ref<{ name: string; hex: string }[]>([]);
 const desaturateValue = ref(50);
