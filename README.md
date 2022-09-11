@@ -17,6 +17,7 @@ This tool is available here: [https://dyetools.zmarc.de](https://dyetools.zmarc.
 - WCAG 2 color contrast checking
 - generating color palettes with up to 10 colors
 - converting colors from one representation to another
+- light and dark mode
 
 ## Screenshots
 
