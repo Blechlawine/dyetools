@@ -115,13 +115,13 @@ const backgroundColor = reactive({
 });
 
 const onForegroundColorChanged = ({ hue, sat, val }: { hue: number; sat: number; val: number }) => {
-    foregroundColor.h = sat;
-    foregroundColor.s = hue;
+    foregroundColor.h = hue;
+    foregroundColor.s = sat;
     foregroundColor.v = val;
 };
 const onBackgroundColorChanged = ({ hue, sat, val }: { hue: number; sat: number; val: number }) => {
-    backgroundColor.h = sat;
-    backgroundColor.s = hue;
+    backgroundColor.h = hue;
+    backgroundColor.s = sat;
     backgroundColor.v = val;
 };
 const getQuotes = async () => {
@@ -132,17 +132,19 @@ const getQuotes = async () => {
     quoteBackground.value = allQuotes.value[Math.floor(Math.random() * allQuotes.value.length)];
 };
 
+const foregroundChrome = computed(() => chroma.hsv(foregroundColor.h, foregroundColor.s, foregroundColor.v));
+const backgroundChrome = computed(() => chroma.hsv(backgroundColor.h, backgroundColor.s, backgroundColor.v));
 const foregroundColorText = computed(() => ({
-    color: chroma.hsv(foregroundColor.h, foregroundColor.s, foregroundColor.v).css(),
+    color: foregroundChrome.value.css(),
 }));
 const backgroundColorText = computed(() => ({
-    color: chroma.hsv(backgroundColor.h, backgroundColor.s, backgroundColor.v).css(),
+    color: backgroundChrome.value.css(),
 }));
 const foregroundColorBackground = computed(() => ({
-    "background-color": chroma.hsv(foregroundColor.h, foregroundColor.s, foregroundColor.v).css(),
+    "background-color": foregroundChrome.value.css(),
 }));
 const backgroundColorBackground = computed(() => ({
-    "background-color": chroma.hsv(backgroundColor.h, backgroundColor.s, backgroundColor.v).css(),
+    "background-color": backgroundChrome.value.css(),
 }));
 const aaColor = computed(() => ({
     color: AApass.value ? "#4CAF50" : "#E35141",
@@ -157,18 +159,15 @@ const aaaLargeColor = computed(() => ({
     color: AAALargePass.value ? "#4CAF50" : "#E35141",
 }));
 const score = computed(() => {
-    let rgb1 = chroma.hsv(backgroundColor.h, backgroundColor.s, backgroundColor.v);
-    let rgb2 = chroma.hsv(foregroundColor.h, foregroundColor.s, foregroundColor.v);
-
     const c1: { [k: string]: number } = {
-        r: rgb1.get("rgb.r") / 255,
-        g: rgb1.get("rgb.g") / 255,
-        b: rgb1.get("rgb.b") / 255,
+        r: backgroundChrome.value.get("rgb.r") / 255,
+        g: backgroundChrome.value.get("rgb.g") / 255,
+        b: backgroundChrome.value.get("rgb.b") / 255,
     };
     const c2: { [k: string]: number } = {
-        r: rgb2.get("rgb.r") / 255,
-        g: rgb2.get("rgb.g") / 255,
-        b: rgb2.get("rgb.b") / 255,
+        r: foregroundChrome.value.get("rgb.r") / 255,
+        g: foregroundChrome.value.get("rgb.g") / 255,
+        b: foregroundChrome.value.get("rgb.b") / 255,
     };
 
     let c1final: { [k: string]: number | null } = {
