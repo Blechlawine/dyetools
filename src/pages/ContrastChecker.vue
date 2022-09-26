@@ -11,19 +11,19 @@
         <div id="checks">
             <div class="checkmarkDiv">
                 <p>AA</p>
-                <span class="material-icons" :style="aaColor">{{ AApass ? "done" : "close" }}</span>
+                <Icon size="xl" :name="AApass ? 'md-done' : 'md-close'" :style="aaColor"></Icon>
             </div>
             <div class="checkmarkDiv">
                 <p>AAA</p>
-                <span class="material-icons" :style="aaaColor">{{ AAApass ? "done" : "close" }}</span>
+                <Icon size="xl" :name="AAApass ? 'md-done' : 'md-close'" :style="aaaColor"></Icon>
             </div>
             <div class="checkmarkDiv">
                 <p>AA Large</p>
-                <span class="material-icons" :style="aaLargeColor">{{ AALargePass ? "done" : "close" }}</span>
+                <Icon size="xl" :name="AALargePass ? 'md-done' : 'md-close'" :style="aaLargeColor"></Icon>
             </div>
             <div class="checkmarkDiv">
                 <p>AAA Large</p>
-                <span class="material-icons" :style="aaaLargeColor">{{ AAALargePass ? "done" : "close" }}</span>
+                <Icon size="xl" :name="AAALargePass ? 'md-done' : 'md-close'" :style="aaaLargeColor"></Icon>
             </div>
         </div>
 
@@ -89,6 +89,7 @@
 import { ref, computed, reactive, onMounted } from "vue";
 import ColorPickerBig from "../components/picker/ColorPickerBig.vue";
 import chroma from "chroma-js";
+import Icon from "../components/Icon.vue";
 const quoteForeground = ref<IQuote | null>(null);
 const quoteBackground = ref<IQuote | null>(null);
 const AApass = ref(false);
@@ -147,16 +148,16 @@ const backgroundColorBackground = computed(() => ({
     "background-color": backgroundChrome.value.css(),
 }));
 const aaColor = computed(() => ({
-    color: AApass.value ? "#4CAF50" : "#E35141",
+    fill: AApass.value ? "#4CAF50" : "#E35141",
 }));
 const aaaColor = computed(() => ({
-    color: AAApass.value ? "#4CAF50" : "#E35141",
+    fill: AAApass.value ? "#4CAF50" : "#E35141",
 }));
 const aaLargeColor = computed(() => ({
-    color: AALargePass.value ? "#4CAF50" : "#E35141",
+    fill: AALargePass.value ? "#4CAF50" : "#E35141",
 }));
 const aaaLargeColor = computed(() => ({
-    color: AAALargePass.value ? "#4CAF50" : "#E35141",
+    fill: AAALargePass.value ? "#4CAF50" : "#E35141",
 }));
 const score = computed(() => {
     const c1: { [k: string]: number } = {
@@ -298,14 +299,10 @@ textarea {
 
 .checkmarkDiv {
     width: 10ch;
-    text-align: center;
     display: flex;
     flex-direction: column;
-    grid-gap: 8px;
-}
-
-.checkmarkDiv .material-icons {
-    font-size: 48px;
+    align-items: center;
+    gap: 8px;
 }
 
 .column {
@@ -313,7 +310,7 @@ textarea {
     flex-direction: column;
     align-items: center;
 
-    grid-gap: 40px;
+    gap: 40px;
 }
 
 @media screen and (min-width: 1500px) {

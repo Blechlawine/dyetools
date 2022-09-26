@@ -3,12 +3,13 @@
         <div class="miniToast" v-show="showToast">copied!</div>
         <p>{{ value }}</p>
         <div class="copyBtn" @click="copyToClipboard">
-            <span class="material-icons middle">content_copy</span>
+            <Icon size="sm" name="md-contentcopy"></Icon>
         </div>
     </div>
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
+import Icon from "../Icon.vue";
 import { copyString } from "../../utils";
 
 const props = defineProps({

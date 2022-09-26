@@ -3,17 +3,18 @@
         <input type="number" v-model="value" :min="min" :max="max" :step="step" />
         <div class="numberInputButtons">
             <div class="numberInputButton minus" @click="value = value - step">
-                <span class="material-icons smol">remove</span>
+                <Icon name="md-remove" size="xs"></Icon>
             </div>
             <div class="{style.divider}"></div>
             <div class="numberInputButton plus" @click="value = value + step">
-                <span class="material-icons smol">add</span>
+                <Icon name="md-add" size="xs"></Icon>
             </div>
         </div>
     </div>
 </template>
 <script setup lang="ts">
 import { computed } from "vue";
+import Icon from "../Icon.vue";
 
 const emit = defineEmits<{
     (e: "update:modelValue", value: number): void;
@@ -86,6 +87,10 @@ const value = computed({
     height: 16px;
 
     cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .divider {

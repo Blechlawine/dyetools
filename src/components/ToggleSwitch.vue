@@ -1,7 +1,7 @@
 <template>
     <label class="switch" :style="backStyle">
         <div class="switchThumb" :style="thumbStyle">
-            <span class="material-icons">{{ darkMode ? "dark_mode" : "light_mode" }}</span>
+            <Icon :name="darkMode ? 'md-darkmode' : 'md-lightmode'"></Icon>
             <input class="checkBox" type="checkbox" ref="checkBox" @click="darkMode = !darkMode" />
         </div>
     </label>
@@ -9,6 +9,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
 import { darkMode } from "../stores/store";
+import Icon from "./Icon.vue";
 
 const root = ref<HTMLElement | null>(null);
 

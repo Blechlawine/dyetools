@@ -1,32 +1,46 @@
 <template>
-    <div class="paletteColor move-transition" :style="`background-color: ${color.hex}; color: ${textColor}`">
+    <div
+        class="paletteColor move-transition"
+        :style="`background-color: ${color.hex}; color: ${textColor}; fill: ${textColor}`"
+    >
         <div :class="classesForLeftAddColorButton">
-            <span @click="emit('add', index)" class="material-icons">add</span>
+            <Icon name="md-add" @click="emit('add', index)"></Icon>
         </div>
         <div class="colorInfo">
             <p class="colorLabel">
                 {{ displayText }}
-                <span class="material-icons" v-if="color.locked">push_pin</span>
+                <Icon name="md-pushpin" v-if="color.locked"></Icon>
             </p>
-            <span class="material-icons copyIcon" @click="copyString(color.hex)">content_copy</span>
-            <span class="material-icons editIcon" @click="emit('togglePicker')">edit</span>
+            <Icon name="md-contentcopy" class="copyIcon" @click="copyString(color.hex)"></Icon>
+            <Icon name="md-edit" class="editIcon" @click="emit('togglePicker')"></Icon>
             <span>
-                <span :class="pinClasses" :style="`opacity: ${color.locked ? '1' : '0.6'}`" @click="emit('pin')"
-                    >push_pin</span
-                >
+                <Icon
+                    v-if="color.locked"
+                    class="pinIcon"
+                    name="md-pushpin"
+                    :style="`opacity: ${color.locked ? '1' : '0.6'}`"
+                    @click="emit('pin')"
+                ></Icon>
+                <Icon
+                    v-else
+                    class="pinIcon"
+                    name="md-pushpin-outlined"
+                    :style="`opacity: ${color.locked ? '1' : '0.6'}`"
+                    @click="emit('pin')"
+                ></Icon>
             </span>
-            <span class="material-icons deleteIcon" @click="emit('delete')">delete</span>
+            <Icon name="md-delete" class="deleteIcon" @click="emit('delete')"></Icon>
             <span class="leftRightButtons">
                 <div class="moveLeftButton" @click="emit('moveLeft')" v-if="canMoveLeft">
-                    <span class="material-icons">chevron_left</span>
+                    <Icon name="md-chevronleft"></Icon>
                 </div>
                 <div class="moveRightButton" @click="emit('moveRight')" v-if="canMoveRight">
-                    <span class="material-icons">chevron_right</span>
+                    <Icon name="md-chevronright"></Icon>
                 </div>
             </span>
         </div>
         <div :class="classesForRightAddColorButton">
-            <span class="material-icons" @click="emit('add', index + 1)">add</span>
+            <Icon name="md-add" @click="emit('add', index + 1)"></Icon>
         </div>
         <ColorPickerBig
             responsive
@@ -43,6 +57,7 @@
 </template>
 <script setup lang="ts">
 import ColorPickerBig from "./picker/ColorPickerBig.vue";
+import Icon from "./Icon.vue";
 import chroma from "chroma-js";
 import { computed, PropType } from "vue";
 import { copyString } from "../utils";
@@ -131,6 +146,7 @@ const pinClasses = computed(() => {
 }
 .paletteColor * {
     color: inherit;
+    fill: inherit;
 }
 .addColorButton.moveRight {
     transform: translateX(50%);
@@ -139,6 +155,8 @@ const pinClasses = computed(() => {
 .copyIcon,
 .pinIcon,
 .editIcon,
+.moveLeftButton,
+.moveRightButton,
 .deleteIcon {
     cursor: pointer;
 }
@@ -170,6 +188,7 @@ const pinClasses = computed(() => {
     background-color: var(--background);
     border-radius: 50%;
     color: var(--textColorDark);
+    fill: var(--textColorDark);
     cursor: pointer;
 }
 

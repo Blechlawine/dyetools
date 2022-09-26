@@ -3,7 +3,7 @@
         <div class="hackyCloseButton" v-if="open" @click="() => (open = false)"></div>
         <div @click="open = !open" class="dropdownValue" :style="[widthStyle, valueStyle]">
             <p>{{ value }}</p>
-            <span class="material-icons">{{ open ? "expand_less" : "expand_more" }}</span>
+            <Icon :name="open ? 'md-expandless' : 'md-expandmore'"></Icon>
         </div>
         <div class="dropdownValues" :style="widthStyle" v-if="open">
             <span v-for="v in values" @click="onValueClick(v)">{{ v }}</span>
@@ -11,6 +11,7 @@
     </div>
 </template>
 <script setup lang="ts">
+import Icon from "../Icon.vue";
 import { computed, onMounted, PropType, ref } from "vue";
 
 const props = defineProps({
