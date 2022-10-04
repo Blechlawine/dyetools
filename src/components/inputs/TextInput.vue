@@ -42,5 +42,6 @@ const textBoxBorder = computed(() => ({
     outline: none;
     padding: 10px;
     border-radius: 6px;
+    background-color: var(--background);
 }
 </style>

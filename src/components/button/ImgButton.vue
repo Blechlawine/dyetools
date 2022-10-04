@@ -1,12 +1,13 @@
 <template>
     <Button class="imgButton" :style="size" @click="$emit('click', $event)">
-        <span class="material-icons">{{ icon }}</span>
+        <Icon :name="icon"></Icon>
     </Button>
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
 import Button from "./Button.vue";
+import Icon from "../Icon.vue";
 
 const props = defineProps({
     icon: {

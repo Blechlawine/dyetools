@@ -9,13 +9,13 @@
         <div class="settingsBar">
             <Dropdown :values="harmonyValues" @select="changeHarmony" />
             <Dropdown :values="displayTypes" @select="displayTypeIndex = $event" />
-            <ImgButton icon="share" @click="share" />
-            <ImgButton icon="refresh" @click="generateColorsForSelectedHarmony"></ImgButton>
+            <ImgButton icon="md-share" @click="share" />
+            <ImgButton icon="md-refresh" @click="generateColorsForSelectedHarmony"></ImgButton>
         </div>
         <transition-group name="move" tag="div" class="paletteColors">
             <PaletteColor
                 v-for="(color, index) in colors"
-                :key="index"
+                :key="color.hashId"
                 :color="color"
                 :canMoveLeft="index !== 0"
                 :canMoveRight="index !== colors.length - 1"

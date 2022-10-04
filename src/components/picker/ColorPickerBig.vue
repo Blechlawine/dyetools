@@ -2,7 +2,7 @@
     <div class="colorPicker" :style="colorPickerResponsiveStyles">
         <div class="topPart" :style="topBottomResponsiveStyles">
             <div class="horizontalFlex">
-                <span v-if="closable" class="material-icons" @click="emit('close')">close</span>
+                <Icon class="closeBtn" v-if="closable" @click="emit('close')" name="md-close"></Icon>
             </div>
             <SatValPicker
                 :saturation="_hsv.s"
@@ -67,7 +67,6 @@
                 <TextInput placeholder="#FFFFFF" :valid="hexBoxValid" v-model="hexValue"></TextInput>
                 <Button @click="textIn">Ok</Button>
             </div>
-            <!-- TODO: DOESNT WORK -->
             <Swatches
                 v-else
                 :type="sliderMode"
@@ -91,7 +90,8 @@ import HSLSliderCollection from "../inputs/slider/collections/HSLSliderCollectio
 import LABSliderCollection from "../inputs/slider/collections/LABSliderCollection.vue";
 import Swatches from "./Swatches.vue";
 import chroma from "chroma-js";
-import { computed, nextTick, onMounted, reactive, ref, watch, WritableComputedRef } from "vue";
+import Icon from "../Icon.vue";
+import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
 
 const sliderModes = ["RGB", "HSL", "CMYK", "LAB", "Copic", "RAL", "HKS", "Name", "HEX", "Pantone"];
 interface ISliderCollectionChangeEventPayload {
@@ -387,5 +387,9 @@ const changeEnd = () => {
     display: flex;
     flex-direction: column;
     gap: 4px;
+}
+
+.closeBtn {
+    cursor: pointer;
 }
 </style>

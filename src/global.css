@@ -1,7 +1,14 @@
-/* TODO: serve these fonts locally */
-@import url("https://fonts.googleapis.com/css2?family=Material+Icons");
-@import url("https://fonts.googleapis.com/css2?family=Material+Icons+Outlined");
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
+@font-face {
+    font-family: "Roboto";
+    font-weight: 400;
+    src: url("/fonts/Roboto-Regular.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Roboto";
+    font-weight: 700;
+    src: url("/fonts/Roboto-Bold.woff2") format("woff2");
+}
 
 :root[data-theme="dark"] {
     --background: #171717;
