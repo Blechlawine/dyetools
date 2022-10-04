@@ -67,7 +67,6 @@
                 <TextInput placeholder="#FFFFFF" :valid="hexBoxValid" v-model="hexValue"></TextInput>
                 <Button @click="textIn">Ok</Button>
             </div>
-            <!-- TODO: DOESNT WORK -->
             <Swatches
                 v-else
                 :type="sliderMode"
