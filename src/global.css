@@ -10,7 +10,7 @@
     src: url("/fonts/Roboto-Bold.woff2") format("woff2");
 }
 
-:root[data-theme="dark"] {
+:root.dark {
     --background: #171717;
     --light-gray: #242424;
     --middle-gray: #303030;
@@ -19,7 +19,7 @@
     --textColorLight: var(--text-dark);
 }
 
-:root[data-theme="light"] {
+:root:not(.dark) {
     --background: white;
     --light-gray: #e9e9e9;
     --middle-gray: #959595;

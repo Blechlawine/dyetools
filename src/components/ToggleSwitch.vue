@@ -2,34 +2,14 @@
     <label class="switch" :style="backStyle">
         <div class="switchThumb" :style="thumbStyle">
             <Icon :name="darkMode ? 'md-darkmode' : 'md-lightmode'"></Icon>
-            <input class="checkBox" type="checkbox" ref="checkBox" @click="darkMode = !darkMode" />
+            <input class="checkBox" type="checkbox" ref="checkBox" @click="toggleDarkMode()" />
         </div>
     </label>
 </template>
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
-import { darkMode } from "../stores/store";
+import { computed } from "vue";
+import { darkMode, toggleDarkMode } from "../stores/store";
 import Icon from "./Icon.vue";
-
-const root = ref<HTMLElement | null>(null);
-
-onMounted(() => {
-    root.value = document.documentElement;
-    if (darkMode.value) {
-        root.value.dataset.theme = "dark";
-    } else {
-        root.value.dataset.theme = "light";
-    }
-});
-
-watch(darkMode, () => {
-    if (!root.value) return;
-    if (darkMode.value) {
-        root.value.dataset.theme = "dark";
-    } else {
-        root.value.dataset.theme = "light";
-    }
-});
 
 const thumbStyle = computed(() => ({
     "background-color": darkMode.value ? "var(--accent)" : "var(--middle-gray)",
