@@ -3,7 +3,7 @@
         <div class="hackyCloseButton" v-if="open" @click="() => (open = false)"></div>
         <div @click="open = !open" class="dropdownValue" :style="[widthStyle, valueStyle]">
             <p>{{ value }}</p>
-            <Icon :name="open ? 'md-expandless' : 'md-expandmore'"></Icon>
+            <Icon :name="open ? 'i-tabler-chevron-up' : 'i-tabler-chevron-down'"></Icon>
         </div>
         <div class="dropdownValues" :style="widthStyle" v-if="open">
             <span v-for="v in values" @click="onValueClick(v)">{{ v }}</span>

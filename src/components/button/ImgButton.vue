@@ -5,13 +5,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { type PropType, computed } from "vue";
 import Button from "./Button.vue";
 import Icon from "../Icon.vue";
 
 const props = defineProps({
     icon: {
-        type: String,
+        type: String as PropType<`i-tabler-${string}`>,
         required: true,
     },
     large: {

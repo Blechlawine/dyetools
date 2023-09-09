@@ -3,7 +3,7 @@
         <div class="miniToast" v-show="showToast">copied!</div>
         <p>{{ value }}</p>
         <div class="copyBtn" @click="copyToClipboard">
-            <Icon size="sm" name="md-contentcopy"></Icon>
+            <Icon size="sm" name="i-tabler-copy"></Icon>
         </div>
     </div>
 </template>

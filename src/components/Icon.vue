@@ -1,12 +1,12 @@
 <template>
-    <ovIcon :class="['icon', sizeClass]" :name="name"></ovIcon>
+    <div :class="['icon', sizeClass, name]"></div>
 </template>
 <script setup lang="ts">
 import { computed, PropType } from "vue";
 
 const props = defineProps({
     name: {
-        type: String,
+        type: String as PropType<`i-tabler-${string}`>,
         required: true,
     },
     size: {
@@ -18,6 +18,7 @@ const props = defineProps({
 const sizeClass = computed(() => `icon-${props.size}`);
 </script>
 <style scoped>
+
 .icon:not(.icon-sm):not(.icon-xs):not(.icon-xl) {
     width: 24px;
     height: 24px;

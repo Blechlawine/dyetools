@@ -4,43 +4,43 @@
         :style="`background-color: ${color.hex}; color: ${textColor}; fill: ${textColor}`"
     >
         <div :class="classesForLeftAddColorButton">
-            <Icon name="md-add" @click="emit('add', index)"></Icon>
+            <Icon name="i-tabler-plus" @click="emit('add', index)"></Icon>
         </div>
         <div class="colorInfo">
             <p class="colorLabel">
                 {{ displayText }}
-                <Icon name="md-pushpin" v-if="color.locked"></Icon>
+                <Icon name="i-tabler-pin-filled" v-if="color.locked"></Icon>
             </p>
-            <Icon name="md-contentcopy" class="copyIcon" @click="copyString(color.hex)"></Icon>
-            <Icon name="md-edit" class="editIcon" @click="emit('togglePicker')"></Icon>
+            <Icon name="i-tabler-copy" class="copyIcon" @click="copyString(color.hex)"></Icon>
+            <Icon name="i-tabler-pencil" class="editIcon" @click="emit('togglePicker')"></Icon>
             <span>
                 <Icon
                     v-if="color.locked"
                     class="pinIcon"
-                    name="md-pushpin"
+                    name="i-tabler-pin-filled"
                     :style="`opacity: ${color.locked ? '1' : '0.6'}`"
                     @click="emit('pin')"
                 ></Icon>
                 <Icon
                     v-else
                     class="pinIcon"
-                    name="md-pushpin-outlined"
+                    name="i-tabler-pin"
                     :style="`opacity: ${color.locked ? '1' : '0.6'}`"
                     @click="emit('pin')"
                 ></Icon>
             </span>
-            <Icon name="md-delete" class="deleteIcon" @click="emit('delete')"></Icon>
+            <Icon name="i-tabler-trash" class="deleteIcon" @click="emit('delete')"></Icon>
             <span class="leftRightButtons">
                 <div class="moveLeftButton" @click="emit('moveLeft')" v-if="canMoveLeft">
-                    <Icon name="md-chevronleft"></Icon>
+                    <Icon name="i-tabler-chevron-left"></Icon>
                 </div>
                 <div class="moveRightButton" @click="emit('moveRight')" v-if="canMoveRight">
-                    <Icon name="md-chevronright"></Icon>
+                    <Icon name="i-tabler-chevron-right"></Icon>
                 </div>
             </span>
         </div>
         <div :class="classesForRightAddColorButton">
-            <Icon name="md-add" @click="emit('add', index + 1)"></Icon>
+            <Icon name="i-tabler-plus" @click="emit('add', index + 1)"></Icon>
         </div>
         <ColorPickerBig
             responsive

@@ -11,19 +11,35 @@
         <div id="checks">
             <div class="checkmarkDiv">
                 <p>AA</p>
-                <Icon size="xl" :name="AApass ? 'md-done' : 'md-close'" :style="aaColor"></Icon>
+                <Icon
+                    size="xl"
+                    :name="AApass ? 'i-tabler-check' : 'i-tabler-x'"
+                    :style="aaColor"
+                ></Icon>
             </div>
             <div class="checkmarkDiv">
                 <p>AAA</p>
-                <Icon size="xl" :name="AAApass ? 'md-done' : 'md-close'" :style="aaaColor"></Icon>
+                <Icon
+                    size="xl"
+                    :name="AAApass ? 'i-tabler-check' : 'i-tabler-x'"
+                    :style="aaaColor"
+                ></Icon>
             </div>
             <div class="checkmarkDiv">
                 <p>AA Large</p>
-                <Icon size="xl" :name="AALargePass ? 'md-done' : 'md-close'" :style="aaLargeColor"></Icon>
+                <Icon
+                    size="xl"
+                    :name="AALargePass ? 'i-tabler-check' : 'i-tabler-x'"
+                    :style="aaLargeColor"
+                ></Icon>
             </div>
             <div class="checkmarkDiv">
                 <p>AAA Large</p>
-                <Icon size="xl" :name="AAALargePass ? 'md-done' : 'md-close'" :style="aaaLargeColor"></Icon>
+                <Icon
+                    size="xl"
+                    :name="AAALargePass ? 'i-tabler-check' : 'i-tabler-x'"
+                    :style="aaaLargeColor"
+                ></Icon>
             </div>
         </div>
 
@@ -133,8 +149,12 @@ const getQuotes = async () => {
     quoteBackground.value = allQuotes.value[Math.floor(Math.random() * allQuotes.value.length)];
 };
 
-const foregroundChrome = computed(() => chroma.hsv(foregroundColor.h, foregroundColor.s, foregroundColor.v));
-const backgroundChrome = computed(() => chroma.hsv(backgroundColor.h, backgroundColor.s, backgroundColor.v));
+const foregroundChrome = computed(() =>
+    chroma.hsv(foregroundColor.h, foregroundColor.s, foregroundColor.v)
+);
+const backgroundChrome = computed(() =>
+    chroma.hsv(backgroundColor.h, backgroundColor.s, backgroundColor.v)
+);
 const foregroundColorText = computed(() => ({
     color: foregroundChrome.value.css(),
 }));
@@ -148,16 +168,16 @@ const backgroundColorBackground = computed(() => ({
     "background-color": backgroundChrome.value.css(),
 }));
 const aaColor = computed(() => ({
-    fill: AApass.value ? "#4CAF50" : "#E35141",
+    color: AApass.value ? "#4CAF50" : "#E35141",
 }));
 const aaaColor = computed(() => ({
-    fill: AAApass.value ? "#4CAF50" : "#E35141",
+    color: AAApass.value ? "#4CAF50" : "#E35141",
 }));
 const aaLargeColor = computed(() => ({
-    fill: AALargePass.value ? "#4CAF50" : "#E35141",
+    color: AALargePass.value ? "#4CAF50" : "#E35141",
 }));
 const aaaLargeColor = computed(() => ({
-    fill: AAALargePass.value ? "#4CAF50" : "#E35141",
+    color: AAALargePass.value ? "#4CAF50" : "#E35141",
 }));
 const score = computed(() => {
     const c1: { [k: string]: number } = {

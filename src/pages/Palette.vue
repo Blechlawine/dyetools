@@ -9,8 +9,11 @@
         <div class="settingsBar">
             <Dropdown :values="harmonyValues" @select="changeHarmony" />
             <Dropdown :values="displayTypes" @select="displayTypeIndex = $event" />
-            <ImgButton icon="md-share" @click="share" />
-            <ImgButton icon="md-refresh" @click="generateColorsForSelectedHarmony"></ImgButton>
+            <ImgButton icon="i-tabler-share" @click="share" />
+            <ImgButton
+                icon="i-tabler-refresh"
+                @click="generateColorsForSelectedHarmony"
+            ></ImgButton>
         </div>
         <transition-group name="move" tag="div" class="paletteColors">
             <PaletteColor

@@ -1,7 +1,7 @@
 <template>
     <label class="switch" :style="backStyle">
         <div class="switchThumb" :style="thumbStyle">
-            <Icon :name="darkMode ? 'md-darkmode' : 'md-lightmode'"></Icon>
+            <Icon :name="darkMode ? 'i-tabler-moon-stars' : 'i-tabler-sun'"></Icon>
             <input class="checkBox" type="checkbox" ref="checkBox" @click="toggleDarkMode()" />
         </div>
     </label>

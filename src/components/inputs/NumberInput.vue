@@ -3,11 +3,11 @@
         <input type="number" v-model="value" :min="min" :max="max" :step="step" />
         <div class="numberInputButtons">
             <div class="numberInputButton minus" @click="value = value - step">
-                <Icon name="md-remove" size="xs"></Icon>
+                <Icon name="i-tabler-minus" size="xs"></Icon>
             </div>
             <div class="{style.divider}"></div>
             <div class="numberInputButton plus" @click="value = value + step">
-                <Icon name="md-add" size="xs"></Icon>
+                <Icon name="i-tabler-plus" size="xs"></Icon>
             </div>
         </div>
     </div>

@@ -2,7 +2,12 @@
     <div class="colorPicker" :style="colorPickerResponsiveStyles">
         <div class="topPart" :style="topBottomResponsiveStyles">
             <div class="horizontalFlex">
-                <Icon class="closeBtn" v-if="closable" @click="emit('close')" name="md-close"></Icon>
+                <Icon
+                    class="closeBtn"
+                    v-if="closable"
+                    @click="emit('close')"
+                    name="i-tabler-x"
+                ></Icon>
             </div>
             <SatValPicker
                 :saturation="_hsv.s"
@@ -64,7 +69,11 @@
             >
             </LABSliderCollection>
             <div class="horizontalFlex" v-else-if="sliderMode === 'hex'">
-                <TextInput placeholder="#FFFFFF" :valid="hexBoxValid" v-model="hexValue"></TextInput>
+                <TextInput
+                    placeholder="#FFFFFF"
+                    :valid="hexBoxValid"
+                    v-model="hexValue"
+                ></TextInput>
                 <Button @click="textIn">Ok</Button>
             </div>
             <Swatches
@@ -216,7 +225,8 @@ const copyValue = computed(() => {
     }
 });
 const colorPickerResponsiveStyles = computed(() => ({
-    "flex-direction": props.responsive && winHeight.value <= 768 ? ("row" as "row") : ("column" as "column"), // wtf is this? why can it not infer the literal type
+    "flex-direction":
+        props.responsive && winHeight.value <= 768 ? ("row" as "row") : ("column" as "column"), // wtf is this? why can it not infer the literal type
     width: props.responsive && winHeight.value <= 768 ? "calc(345px * 2)" : "345px",
     height: props.responsive && winHeight.value <= 768 ? "298px" : "",
 }));
@@ -274,11 +284,20 @@ const sliderChanged = (value: ISliderCollectionChangeEventPayload) => {
         _rgb.r = value.red;
         _rgb.g = value.green;
         _rgb.b = value.blue;
-    } else if (value.hue !== undefined && value.saturation !== undefined && value.lightness !== undefined) {
+    } else if (
+        value.hue !== undefined &&
+        value.saturation !== undefined &&
+        value.lightness !== undefined
+    ) {
         _hsl.h = value.hue;
         _hsl.s = value.saturation / 100;
         _hsl.l = value.lightness / 100;
-    } else if (value.c !== undefined && value.m !== undefined && value.y !== undefined && value.k !== undefined) {
+    } else if (
+        value.c !== undefined &&
+        value.m !== undefined &&
+        value.y !== undefined &&
+        value.k !== undefined
+    ) {
         _cmyk.c = value.c / 100;
         _cmyk.m = value.m / 100;
         _cmyk.y = value.y / 100;
