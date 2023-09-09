@@ -290,6 +290,7 @@ const desaturateClicked = () => {
     display: flex;
     flex-direction: column;
     grid-gap: 8px;
+    width: 200px;
 }
 
 .sliderpartpart {
