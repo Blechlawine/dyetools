@@ -7,8 +7,12 @@
     </teleport>
     <div class="palette">
         <div class="settingsBar">
-            <Dropdown :values="harmonyValues" @select="changeHarmony" />
-            <Dropdown :values="displayTypes" @select="displayTypeIndex = $event" />
+            <Dropdown
+                :values="harmonyValues"
+                @update:modelValue="changeHarmony"
+                :model-value="harmony"
+            />
+            <Dropdown :values="displayTypes" v-model="displayType" />
             <ImgButton icon="i-tabler-share" @click="share" />
             <ImgButton
                 icon="i-tabler-refresh"
@@ -95,12 +99,11 @@ const colors = ref<Color[]>([
     },
 ]);
 const openPickerId = ref(-1);
-const harmony = ref("auto");
-const displayTypeIndex = ref(0);
+const harmony = ref(harmonyValues[0]);
 
 const lockedColors = computed(() => colors.value.filter((color) => color.locked));
 const unlockedColors = computed(() => colors.value.filter((color) => !color.locked));
-const displayType = computed(() => displayTypes[displayTypeIndex.value]);
+const displayType = ref(displayTypes[0]);
 
 const moveColorLeft = (id: number) => {
     let tempColors = colors.value;
@@ -118,8 +121,8 @@ const moveColorRight = (id: number) => {
     colors.value = tempColors;
     updateRoute();
 };
-const changeHarmony = (valueIndex: number) => {
-    harmony.value = harmonyValues[valueIndex].toLowerCase();
+const changeHarmony = (v: string) => {
+    harmony.value = v;
     generateColorsForSelectedHarmony();
 };
 const share = () => {
@@ -269,7 +272,7 @@ const generateColorsForSelectedHarmony = () => {
         startColor = chroma(locked[randIndex].hex);
     }
     switch (harmony.value) {
-        case "auto":
+        case t("palette.harmony.auto"):
             let prob = Math.random() * 10;
             if (prob < 1) {
                 generateRandomColors(startIndex);
@@ -293,34 +296,34 @@ const generateColorsForSelectedHarmony = () => {
                 generateMonochromaticColors(startColor);
             }
             break;
-        case "random":
+        case t("palette.harmony.random"):
             generateRandomColors(startIndex);
             break;
-        case "analogous":
+        case t("palette.harmony.analogous"):
             generateAnalogousColors(startColor);
             break;
-        case "triadic":
+        case t("palette.harmony.triadic"):
             generateTriadicColors(startColor);
             break;
-        case "tetradic":
+        case t("palette.harmony.tetradic"):
             generateTetradicColors(startColor);
             break;
-        case "complementary":
+        case t("palette.harmony.complementary"):
             generateComplementaryColors(startColor);
             break;
-        case "split-complementary":
+        case t("palette.harmony.split-complementary"):
             generateSplitComplementaryColors(startColor);
             break;
-        case "square":
+        case t("palette.harmony.square"):
             generateSquareColors(startColor);
             break;
-        case "warm":
+        case t("palette.harmony.warm"):
             generateWarmColors(startIndex);
             break;
-        case "cool":
+        case t("palette.harmony.cool"):
             generateCoolColors(startIndex);
             break;
-        case "monochromatic":
+        case t("palette.harmony.monochromatic"):
             generateMonochromaticColors(startColor);
             break;
         default:
