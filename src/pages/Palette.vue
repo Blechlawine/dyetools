@@ -3,7 +3,7 @@
         <meta name="description" :content="colors.map((c) => c.hex).join(', ')" />
         <meta property="og:description" :content="colors.map((c) => c.hex).join(', ')" />
         <meta property="og:title" content="Dyetools - Color palette" />
-        <title>Dyetools - Color palette</title>
+        <title>Dyetools - {{ $t("palette.title") }}</title>
     </teleport>
     <div class="palette">
         <div class="settingsBar">
@@ -46,24 +46,28 @@ import PaletteColor from "../components/PaletteColor.vue";
 import ImgButton from "../components/button/ImgButton.vue";
 import { genRandHex, copyString } from "../utils";
 import { toastText } from "../stores/store";
+import { useI18n } from "vue-i18n";
+import { type Color } from "../types";
+
+const { t } = useI18n();
 
 const Router = useRouter();
 
 const harmonyValues = [
-    "Auto",
-    "Analogous",
-    "Monochromatic",
-    "Complementary",
-    "Split-complementary",
-    "Triadic",
-    "Tetradic",
-    "Square",
-    "Cool",
-    "Warm",
-    "Random",
+    t("palette.harmony.auto"),
+    t("palette.harmony.analogous"),
+    t("palette.harmony.monochromatic"),
+    t("palette.harmony.complementary"),
+    t("palette.harmony.split-complementary"),
+    t("palette.harmony.triadic"),
+    t("palette.harmony.tetradic"),
+    t("palette.harmony.square"),
+    t("palette.harmony.cool"),
+    t("palette.harmony.warm"),
+    t("palette.harmony.random"),
 ];
 const displayTypes = ["HEX", "RGB", "HSL"];
-const colors = ref<IColor[]>([
+const colors = ref<Color[]>([
     {
         hashId: genRandHex(6),
         hex: "#FFFFFF",
@@ -121,12 +125,12 @@ const changeHarmony = (valueIndex: number) => {
 const share = () => {
     let path = window.location.href;
     copyString(path);
-    toastText.value = "Link copied!";
+    toastText.value = t("common.link-copied");
 };
 const pinColor = (index: number) => {
     colors.value[index].locked = !colors.value[index].locked;
 };
-const editColor = (color: IColor, data: { hue: number; sat: number; val: number }) => {
+const editColor = (color: Color, data: { hue: number; sat: number; val: number }) => {
     console.log(data, color);
     let hue = isNaN(data.hue) ? 0 : data.hue;
     color.hex = chroma(hue, data.sat, data.val, "hsv").hex();
@@ -323,13 +327,6 @@ const generateColorsForSelectedHarmony = () => {
             break;
     }
     updateRoute();
-};
-const pinClasses = (locked: boolean) => {
-    if (locked) {
-        return "material-icons pinIcon";
-    } else {
-        return "material-icons-outlined pinIcon";
-    }
 };
 const addColor = (index: number) => {
     if (colors.value.length < 10) {

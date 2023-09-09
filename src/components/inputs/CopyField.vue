@@ -1,6 +1,6 @@
 <template>
     <div class="copyField">
-        <div class="miniToast" v-show="showToast">copied!</div>
+        <div class="miniToast" v-show="showToast">{{ $t("common.copied") }}</div>
         <p>{{ value }}</p>
         <div class="copyBtn" @click="copyToClipboard">
             <Icon size="sm" name="i-tabler-copy"></Icon>

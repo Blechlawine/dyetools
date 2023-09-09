@@ -7,6 +7,10 @@
             </span>
 
             <div class="rightStuff">
+                <Dropdown
+                    :values="$i18n.availableLocales"
+                    @select="$i18n.locale = $i18n.availableLocales[$event]"
+                ></Dropdown>
                 <ToggleSwitch></ToggleSwitch>
             </div>
         </div>
@@ -18,6 +22,7 @@
 
 <script setup lang="ts">
 import Tabs from "./Tabs.vue";
+import Dropdown from "../inputs/Dropdown.vue";
 import ToggleSwitch from "../ToggleSwitch.vue";
 </script>
 

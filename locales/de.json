@@ -1,0 +1,55 @@
+{
+    "contrast-checker": {
+        "title": "Kontrast-Checker"
+    },
+    "palette": {
+        "title": "Palette",
+        "harmony": {
+            "auto": "Auto",
+            "analogous": "Analog",
+            "monochromatic": "Monochromatisch",
+            "complementary": "Komplementär",
+            "split-complementary": "Geteilt-Komplementär",
+            "triadic": "Triadisch",
+            "tetradic": "Tetradisch",
+            "square": "Quadratisch",
+            "cool": "Kalt",
+            "warm": "Warm",
+            "random": "Zufällig"
+        }
+    },
+    "converter": {
+        "title": "Konverter",
+        "subtitle": {
+            "color": "Farbe",
+            "adjustments": "Anpassungen",
+            "converted": "Konvertiert"
+        },
+        "adjustments": {
+            "lighten": "Aufhellen",
+            "darken": "Abdunkeln",
+            "saturate": "Sättigen",
+            "desaturate": "Entsättigen"
+        }
+    },
+    "common": {
+        "link-copied": "Link kopiert!",
+        "copied": "Kopiert!",
+        "actions": {
+            "apply": "Anwenden",
+            "ok": "OK"
+        },
+        "slider": {
+            "hue": "Farbton",
+            "saturation": "Sättigung",
+            "lightness": "Helligkeit",
+            "red": "Rot",
+            "green": "Grün",
+            "blue": "Blau",
+            "cyan": "Cyan",
+            "magenta": "Magenta",
+            "yellow": "Gelb",
+            "key": "Key"
+        }
+    }
+}

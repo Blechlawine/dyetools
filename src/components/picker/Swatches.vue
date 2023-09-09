@@ -18,19 +18,22 @@
                 :style="`background-color: #${swatch.hex}`"
                 @click="swatchClick(swatch.hex)"
             >
-                <div class="swatchLabel">{{ upperCase ? swatch.name.toUpperCase() : swatch.name }}</div>
+                <div class="swatchLabel">
+                    {{ upperCase ? swatch.name.toUpperCase() : swatch.name }}
+                </div>
             </div>
         </div>
     </div>
 </template>
 <script setup lang="ts">
 import chroma from "chroma-js";
-import { computed, onMounted, ref, watch } from "vue";
+import { PropType, computed, onMounted, ref, watch } from "vue";
+import { SliderMode } from "../../types";
 
-interface ISwatch {
+type Swatch = {
     name: string;
     hex: string;
-}
+};
 
 const emit = defineEmits<{
     (e: "change", hex: string): void;
@@ -42,7 +45,7 @@ const props = defineProps({
         required: true,
     },
     type: {
-        type: String,
+        type: String as PropType<SliderMode>,
         required: true,
     },
     triggerSort: {
@@ -63,20 +66,26 @@ onMounted(() => {
     fetchData();
 });
 
-const swatches = ref<ISwatch[]>([]);
+const swatches = ref<Swatch[]>([]);
 const swatchesRef = ref<HTMLElement | undefined>();
 
-const upperCase = computed(() => props.type !== "name");
+const upperCase = computed(() => props.type !== "Name");
 const first = computed(() => ({
-    name: upperCase.value ? swatches.value[0]?.name.toUpperCase() ?? "Loading..." : swatches.value[0].name,
+    name: upperCase.value
+        ? swatches.value[0]?.name.toUpperCase() ?? "Loading..."
+        : swatches.value[0].name,
     hex: swatches.value[0]?.hex ?? "#fff",
 }));
 const second = computed(() => ({
-    name: upperCase.value ? swatches.value[1]?.name.toUpperCase() ?? "Loading..." : swatches.value[1].name,
+    name: upperCase.value
+        ? swatches.value[1]?.name.toUpperCase() ?? "Loading..."
+        : swatches.value[1].name,
     hex: swatches.value[1]?.hex ?? "#fff",
 }));
 const third = computed(() => ({
-    name: upperCase.value ? swatches.value[2]?.name.toUpperCase() ?? "Loading..." : swatches.value[2].name,
+    name: upperCase.value
+        ? swatches.value[2]?.name.toUpperCase() ?? "Loading..."
+        : swatches.value[2].name,
     hex: swatches.value[2]?.hex ?? "#fff",
 }));
 const firstStyle = computed(() => ({

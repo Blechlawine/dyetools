@@ -2,7 +2,7 @@
     <div class="sliderCollection">
         <SliderPart
             v-model="_cyan"
-            label="Cyan"
+            :label="$t('common.slider.cyan')"
             :min="0"
             :max="100"
             :slider-background="cyanBackground"
@@ -11,7 +11,7 @@
         </SliderPart>
         <SliderPart
             v-model="_magenta"
-            label="Magenta"
+            :label="$t('common.slider.magenta')"
             :min="0"
             :max="100"
             :slider-background="magentaBackground"
@@ -20,7 +20,7 @@
         </SliderPart>
         <SliderPart
             v-model="_yellow"
-            label="Yellow"
+            :label="$t('common.slider.yellow')"
             :min="0"
             :max="100"
             :slider-background="yellowBackground"
@@ -29,7 +29,7 @@
         </SliderPart>
         <SliderPart
             v-model="_key"
-            label="Key"
+            :label="$t('common.slider.key')"
             :min="0"
             :max="100"
             :slider-background="keyBackground"
@@ -68,36 +68,51 @@ const props = defineProps({
 });
 
 const handleBackground = computed(() => {
-    let chromeHandle = chroma.cmyk(_cyan.value / 100, _magenta.value / 100, _yellow.value / 100, _key.value / 100);
-    return `rgb(${chromeHandle.get("rgb.r")}, ${chromeHandle.get("rgb.g")}, ${chromeHandle.get("rgb.b")})`;
+    let chromeHandle = chroma.cmyk(
+        _cyan.value / 100,
+        _magenta.value / 100,
+        _yellow.value / 100,
+        _key.value / 100
+    );
+    return `rgb(${chromeHandle.get("rgb.r")}, ${chromeHandle.get("rgb.g")}, ${chromeHandle.get(
+        "rgb.b"
+    )})`;
 });
 const cyanBackground = computed(() => {
     let atZero = chroma.cmyk(0, _magenta.value / 100, _yellow.value / 100, _key.value / 100);
     let atHundred = chroma.cmyk(1, _magenta.value / 100, _yellow.value / 100, _key.value / 100);
-    return `linear-gradient(to right, rgb(${atZero.get("rgb.r")}, ${atZero.get("rgb.g")}, ${atZero.get(
-        "rgb.b"
-    )}), rgb(${atHundred.get("rgb.r")},  ${atHundred.get("rgb.g")}, ${atHundred.get("rgb.b")}))`;
+    return `linear-gradient(to right, rgb(${atZero.get("rgb.r")}, ${atZero.get(
+        "rgb.g"
+    )}, ${atZero.get("rgb.b")}), rgb(${atHundred.get("rgb.r")},  ${atHundred.get(
+        "rgb.g"
+    )}, ${atHundred.get("rgb.b")}))`;
 });
 const magentaBackground = computed(() => {
     let atZero = chroma.cmyk(_cyan.value / 100, 0, _yellow.value / 100, _key.value / 100);
     let atHundred = chroma.cmyk(_cyan.value / 100, 1, _yellow.value / 100, _key.value / 100);
-    return `linear-gradient(to right, rgb(${atZero.get("rgb.r")}, ${atZero.get("rgb.g")}, ${atZero.get(
-        "rgb.b"
-    )}), rgb(${atHundred.get("rgb.r")}, ${atHundred.get("rgb.g")}, ${atHundred.get("rgb.b")}))`;
+    return `linear-gradient(to right, rgb(${atZero.get("rgb.r")}, ${atZero.get(
+        "rgb.g"
+    )}, ${atZero.get("rgb.b")}), rgb(${atHundred.get("rgb.r")}, ${atHundred.get(
+        "rgb.g"
+    )}, ${atHundred.get("rgb.b")}))`;
 });
 const yellowBackground = computed(() => {
     let atZero = chroma.cmyk(_cyan.value / 100, _magenta.value / 100, 0, _key.value / 100);
     let atHundred = chroma.cmyk(_cyan.value / 100, _magenta.value / 100, 1, _key.value / 100);
-    return `linear-gradient(to right, rgb(${atZero.get("rgb.r")}, ${atZero.get("rgb.g")}, ${atZero.get(
-        "rgb.b"
-    )}), rgb(${atHundred.get("rgb.r")}, ${atHundred.get("rgb.g")}, ${atHundred.get("rgb.b")}))`;
+    return `linear-gradient(to right, rgb(${atZero.get("rgb.r")}, ${atZero.get(
+        "rgb.g"
+    )}, ${atZero.get("rgb.b")}), rgb(${atHundred.get("rgb.r")}, ${atHundred.get(
+        "rgb.g"
+    )}, ${atHundred.get("rgb.b")}))`;
 });
 const keyBackground = computed(() => {
     let atZero = chroma.cmyk(_cyan.value / 100, _magenta.value / 100, _yellow.value / 100, 0);
     let atHundred = chroma.cmyk(_cyan.value / 100, _magenta.value / 100, _yellow.value / 100, 1);
-    return `linear-gradient(to right, rgb(${atZero.get("rgb.r")}, ${atZero.get("rgb.g")}, ${atZero.get(
-        "rgb.b"
-    )}), rgb(${atHundred.get("rgb.r")}, ${atHundred.get("rgb.g")}, ${atHundred.get("rgb.b")}))`;
+    return `linear-gradient(to right, rgb(${atZero.get("rgb.r")}, ${atZero.get(
+        "rgb.g"
+    )}, ${atZero.get("rgb.b")}), rgb(${atHundred.get("rgb.r")}, ${atHundred.get(
+        "rgb.g"
+    )}, ${atHundred.get("rgb.b")}))`;
 });
 
 const _cyan: WritableComputedRef<number> = computed({

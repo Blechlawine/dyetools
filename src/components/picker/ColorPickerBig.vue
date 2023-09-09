@@ -27,13 +27,13 @@
         <div v-else class="horizontalDivider"></div>
         <div class="bottomPart" :style="topBottomResponsiveStyles">
             <div class="horizontalFlex">
-                <Dropdown :values="sliderModes" @select="activeMode = $event" />
+                <Dropdown :values="sliderModes" v-model="sliderMode" />
                 <CopyField :value="copyValue" />
             </div>
             <div class="horizontalDivider"></div>
             <!-- Slider Collection -->
             <RGBSliderCollection
-                v-if="sliderMode === 'rgb'"
+                v-if="sliderMode === 'RGB'"
                 :red="_rgb.r"
                 :green="_rgb.g"
                 :blue="_rgb.b"
@@ -41,7 +41,7 @@
                 @change-end="changeEnd"
             ></RGBSliderCollection>
             <CMYKSliderCollection
-                v-else-if="sliderMode === 'cmyk'"
+                v-else-if="sliderMode === 'CMYK'"
                 :cyan="_cmyk.c * 100"
                 :magenta="_cmyk.m * 100"
                 :yellow="_cmyk.y * 100"
@@ -51,7 +51,7 @@
             >
             </CMYKSliderCollection>
             <HSLSliderCollection
-                v-else-if="sliderMode === 'hsl'"
+                v-else-if="sliderMode === 'HSL'"
                 :hue="isNaN(_hsl.h) ? 0 : _hsl.h"
                 :saturation="_hsl.s * 100"
                 :lightness="_hsl.l * 100"
@@ -60,7 +60,7 @@
             >
             </HSLSliderCollection>
             <LABSliderCollection
-                v-else-if="sliderMode === 'lab'"
+                v-else-if="sliderMode === 'LAB'"
                 :l="_lab.l"
                 :a="_lab.a"
                 :b="_lab.b"
@@ -68,13 +68,13 @@
                 @change-end="changeEnd"
             >
             </LABSliderCollection>
-            <div class="horizontalFlex" v-else-if="sliderMode === 'hex'">
+            <div class="horizontalFlex" v-else-if="sliderMode === 'HEX'">
                 <TextInput
                     placeholder="#FFFFFF"
                     :valid="hexBoxValid"
                     v-model="hexValue"
                 ></TextInput>
-                <Button @click="textIn">Ok</Button>
+                <Button @click="textIn">{{ $t("common.actions.ok") }}</Button>
             </div>
             <Swatches
                 v-else
@@ -101,9 +101,21 @@ import Swatches from "./Swatches.vue";
 import chroma from "chroma-js";
 import Icon from "../Icon.vue";
 import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
+import { SliderMode } from "../../types";
 
-const sliderModes = ["RGB", "HSL", "CMYK", "LAB", "Copic", "RAL", "HKS", "Name", "HEX", "Pantone"];
-interface ISliderCollectionChangeEventPayload {
+const sliderModes = [
+    "RGB",
+    "HSL",
+    "CMYK",
+    "LAB",
+    "Copic",
+    "RAL",
+    "HKS",
+    "Name",
+    "HEX",
+    "Pantone",
+] as SliderMode[];
+type SliderCollectionChangeEventPayload = {
     red?: number;
     green?: number;
     blue?: number;
@@ -117,7 +129,7 @@ interface ISliderCollectionChangeEventPayload {
     l?: number;
     a?: number;
     b?: number;
-}
+};
 const emit = defineEmits<{
     (e: "change", color: { hue: number; sat: number; val: number }): void;
     (e: "changeEnd"): void;
@@ -190,22 +202,21 @@ watch(
 
 const hueSliderHandlePosition = ref(0);
 const winHeight = ref(0);
-const activeMode = ref(0);
 const triggerSort = ref(0);
 
 const hexBoxValid = computed(() => checkHex(hexValue.value));
 
-const sliderMode = computed(() => sliderModes[activeMode.value].toLowerCase());
+const sliderMode = ref(sliderModes[0]);
 
 const chrome = computed(() => {
     switch (sliderMode.value) {
-        case "hsl":
+        case "HSL":
             return chroma.hsl(_hsl.h, _hsl.s, _hsl.l);
-        case "cmyk":
+        case "CMYK":
             return chroma.cmyk(_cmyk.c, _cmyk.m, _cmyk.y, _cmyk.k);
-        case "rgb":
+        case "RGB":
             return chroma.rgb(_rgb.r, _rgb.g, _rgb.b);
-        case "lab":
+        case "LAB":
             return chroma.lab(_lab.l, _lab.a, _lab.b);
         default:
             return chroma.hsv(props.hue, props.sat, props.val);
@@ -214,9 +225,9 @@ const chrome = computed(() => {
 
 const hexValue = ref(chrome.value.hex());
 const copyValue = computed(() => {
-    if (sliderMode.value === "rgb") {
+    if (sliderMode.value === "RGB") {
         return chrome.value.css();
-    } else if (sliderMode.value === "hsl") {
+    } else if (sliderMode.value === "HSL") {
         let hslSat = Math.round(chrome.value.get("hsl.s") * 100);
         let hslLig = Math.round(chrome.value.get("hsl.l") * 100);
         return `hsl(${Math.round(_hsl.h)}, ${hslSat}%, ${hslLig}%)`;
@@ -279,7 +290,7 @@ const satValChanged = ({ s, v }: { s: number; v: number }) => {
     _hsv.v = v;
     nextTick(updateSlidersFromHSV);
 };
-const sliderChanged = (value: ISliderCollectionChangeEventPayload) => {
+const sliderChanged = (value: SliderCollectionChangeEventPayload) => {
     if (value.red !== undefined && value.green !== undefined && value.blue !== undefined) {
         _rgb.r = value.red;
         _rgb.g = value.green;
@@ -312,26 +323,26 @@ const sliderChanged = (value: ISliderCollectionChangeEventPayload) => {
     _hsv.s = chrome.value.get("hsv.s") ?? _hsv.s;
     _hsv.v = chrome.value.get("hsv.v") ?? _hsv.v;
     hexValue.value = chrome.value.hex().toUpperCase();
-    if (sliderMode.value !== "rgb") {
+    if (sliderMode.value !== "RGB") {
         // RGB
         _rgb.r = chrome.value.get("rgb.r");
         _rgb.g = chrome.value.get("rgb.g");
         _rgb.b = chrome.value.get("rgb.b");
     }
-    if (sliderMode.value !== "hsl") {
+    if (sliderMode.value !== "HSL") {
         // HSL
         _hsl.h = chrome.value.get("hsl.h");
         _hsl.s = chrome.value.get("hsl.s");
         _hsl.l = chrome.value.get("hsl.l");
     }
-    if (sliderMode.value !== "cmyk") {
+    if (sliderMode.value !== "CMYK") {
         // CMYK
         _cmyk.c = chrome.value.get("cmyk.c");
         _cmyk.m = chrome.value.get("cmyk.m");
         _cmyk.y = chrome.value.get("cmyk.y");
         _cmyk.k = chrome.value.get("cmyk.k");
     }
-    if (sliderMode.value !== "lab") {
+    if (sliderMode.value !== "LAB") {
         // LAB
         _lab.l = chrome.value.get("lab.l");
         _lab.a = chrome.value.get("lab.a");

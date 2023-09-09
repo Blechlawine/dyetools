@@ -1,20 +1,20 @@
-import { RouteRecordRaw } from "vue-router";
 import ContrastChecker from "./pages/ContrastChecker.vue";
+import { RouteRecordRaw } from "vue-router";
 
 const routes: RouteRecordRaw[] = [
     {
         path: "/",
-        name: "Contrast-checker",
+        name: "contrast-checker.title",
         component: ContrastChecker,
     },
     {
         path: "/palette",
-        name: "Palette",
+        name: "palette.title",
         component: () => import("./pages/Palette.vue"),
     },
     {
         path: "/converter",
-        name: "Converter",
+        name: "converter.title",
         component: () => import("./pages/Converter.vue"),
     },
 ];

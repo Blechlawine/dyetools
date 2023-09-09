@@ -1,5 +1,8 @@
 import { createApp } from "vue";
+import { createI18n } from "vue-i18n";
 import { createRouter, createWebHistory } from "vue-router";
+import de from "../locales/de.json";
+import en from "../locales/en.json";
 import App from "./App.vue";
 import "./global.css";
 import routes from "./routes";
@@ -10,4 +13,14 @@ const router = createRouter({
     routes,
 });
 
-createApp(App).use(router).mount("#app");
+const i18n = createI18n({
+    locale: "en",
+    fallbackLocale: "en",
+    legacy: false,
+    messages: {
+        en,
+        de,
+    },
+});
+
+createApp(App).use(i18n).use(router).mount("#app");

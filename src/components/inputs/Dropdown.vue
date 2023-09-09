@@ -1,6 +1,6 @@
 <template>
     <div class="dropdown">
-        <div class="hackyCloseButton" v-if="open" @click="() => (open = false)"></div>
+        <div class="hackyCloseButton" v-if="open" @click="open = false"></div>
         <div @click="open = !open" class="dropdownValue" :style="[widthStyle, valueStyle]">
             <p>{{ value }}</p>
             <Icon :name="open ? 'i-tabler-chevron-up' : 'i-tabler-chevron-down'"></Icon>
@@ -11,6 +11,7 @@
     </div>
 </template>
 <script setup lang="ts">
+import { useVModel } from "@vueuse/core";
 import Icon from "../Icon.vue";
 import { computed, onMounted, PropType, ref } from "vue";
 
@@ -19,16 +20,20 @@ const props = defineProps({
         type: Array as PropType<string[]>,
         required: true,
     },
+    modelValue: {
+        type: String,
+        required: false,
+    },
 });
 const emit = defineEmits<{
     (e: "select", valueIndex: number): void;
+    (e: "update:modelValue", value: string): void;
 }>();
+const value = useVModel(props, "modelValue", emit);
 
-const valueIndex = ref(0);
 const width = ref(0);
 const open = ref(false);
 
-const value = computed(() => props.values[valueIndex.value]);
 const valueStyle = computed(() => ({
     border: `2px solid ${open.value ? "var(--accent)" : "var(--light-gray)"}`,
 }));
@@ -44,10 +49,9 @@ onMounted(() => {
     width.value = length;
 });
 
-const onValueClick = (value: string) => {
-    valueIndex.value = props.values.indexOf(value);
+const onValueClick = (v: string) => {
+    value.value = v;
     open.value = false;
-    emit("select", valueIndex.value);
 };
 </script>
 <style scoped>

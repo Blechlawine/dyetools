@@ -2,7 +2,7 @@
     <div class="sliderCollection">
     <SliderPart
             v-model="red"
-            label="Red"
+            :label="$t('common.slider.red')"
             :min="0"
             :max="255"
             :slider-background="redBackground"
@@ -11,7 +11,7 @@
         </SliderPart>
         <SliderPart
             v-model="green"
-            label="Green"
+            :label="$t('common.slider.green')"
             :min="0"
             :max="255"
             :slider-background="greenBackground"
@@ -20,7 +20,7 @@
         </SliderPart>
         <SliderPart
             v-model="blue"
-            label="Blue"
+            :label="$t('common.slider.blue')"
             :min="0"
             :max="255"
             :slider-background="blueBackground"

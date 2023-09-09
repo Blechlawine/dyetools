@@ -3,7 +3,7 @@
         <meta name="description" content="Check your colors for AA and AAA compatibility" />
         <meta property="og:description" content="Check your colors for AA and AAA compatibility" />
         <meta property="og:title" content="Dyetools - Contrast checker" />
-        <title>Dyetools - Contrast checker</title>
+        <title>Dyetools - {{ $t("contrast-checker.title") }}</title>
     </teleport>
     <div class="column">
         <h1 id="score">{{ score.toString().substring(0, 4) }}</h1>
@@ -106,14 +106,19 @@ import { ref, computed, reactive, onMounted } from "vue";
 import ColorPickerBig from "../components/picker/ColorPickerBig.vue";
 import chroma from "chroma-js";
 import Icon from "../components/Icon.vue";
-const quoteForeground = ref<IQuote | null>(null);
-const quoteBackground = ref<IQuote | null>(null);
+import { useI18n } from "vue-i18n";
+import { type Quote } from "../types";
+
+const { locale } = useI18n();
+
+const quoteForeground = ref<Quote | null>(null);
+const quoteBackground = ref<Quote | null>(null);
 const AApass = ref(false);
 const AAApass = ref(false);
 const AALargePass = ref(false);
 const AAALargePass = ref(false);
 
-const allQuotes = ref<IQuote[]>([]);
+const allQuotes = ref<Quote[]>([]);
 
 onMounted(() => {
     getQuotes();
@@ -143,7 +148,7 @@ const onBackgroundColorChanged = ({ hue, sat, val }: { hue: number; sat: number;
 };
 const getQuotes = async () => {
     if (allQuotes.value.length === 0) {
-        allQuotes.value = (await (await fetch("/api/quotes.json")).json()).data;
+        allQuotes.value = (await (await fetch(`/api/quotes-${locale.value}.json`)).json()).data;
     }
     quoteForeground.value = allQuotes.value[Math.floor(Math.random() * allQuotes.value.length)];
     quoteBackground.value = allQuotes.value[Math.floor(Math.random() * allQuotes.value.length)];

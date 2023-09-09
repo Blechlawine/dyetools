@@ -61,9 +61,10 @@ import Icon from "./Icon.vue";
 import chroma from "chroma-js";
 import { computed, PropType } from "vue";
 import { copyString } from "../utils";
+import { type Color } from "../types";
 
 const emit = defineEmits<{
-    (e: "edit", color: IColor, data: { hue: number; sat: number; val: number }): void;
+    (e: "edit", color: Color, data: { hue: number; sat: number; val: number }): void;
     (e: "togglePicker"): void;
     (e: "add", index: number): void;
     (e: "moveRight"): void;
@@ -74,7 +75,7 @@ const emit = defineEmits<{
 
 const props = defineProps({
     color: {
-        type: Object as PropType<IColor>,
+        type: Object as PropType<Color>,
         required: true,
     },
     displayType: {

@@ -3,7 +3,7 @@
         <meta name="description" content="Convert colors into many formats" />
         <meta property="og:description" content="Convert colors into many formats" />
         <meta property="og:title" content="Dyetools - Color converter" />
-        <title>Dyetools - Color converter</title>
+        <title>Dyetools - {{ $t("converter.title") }}</title>
     </teleport>
     <div class="content">
         <div class="column" id="pickerColumn">
@@ -16,14 +16,14 @@
             />
         </div>
         <div class="column" id="colorColumn">
-            <h2>Color</h2>
+            <h2>{{ $t("converter.subtitle.color") }}</h2>
             <div id="color" :style="colorBackground">
                 <p class="centeredText" :style="optimalTextColor">{{ colorName }}</p>
             </div>
-            <h2>Adjustments</h2>
+            <h2>{{ $t("converter.subtitle.adjustments") }}</h2>
             <div class="sliderpartParent" :style="lightenedBackground">
                 <Sliderpart
-                    label="Lighten"
+                    :label="$t('converter.adjustments.lighten')"
                     :min="0"
                     :max="100"
                     v-model="lightenValue"
@@ -34,12 +34,12 @@
                 />
                 <div class="horizontalFlex">
                     <CopyField :value="lightenedChrome.hex().toUpperCase()" />
-                    <Button @click="lightenClicked">Apply</Button>
+                    <Button @click="lightenClicked">{{ $t("common.actions.apply") }}</Button>
                 </div>
             </div>
             <div class="sliderpartParent" :style="darkenedBackground">
                 <Sliderpart
-                    label="Darken"
+                    :label="$t('converter.adjustments.darken')"
                     :min="0"
                     :max="100"
                     v-model="darkenValue"
@@ -50,12 +50,12 @@
                 />
                 <div class="horizontalFlex">
                     <CopyField :value="darkenedChrome.hex().toUpperCase()" />
-                    <Button @click="darkenClicked">Apply</Button>
+                    <Button @click="darkenClicked">{{ $t("common.actions.apply") }}</Button>
                 </div>
             </div>
             <div class="sliderpartParent" :style="saturatedBackground">
                 <Sliderpart
-                    label="Saturate"
+                    :label="$t('converter.adjustments.saturate')"
                     :min="0"
                     :max="100"
                     v-model="saturateValue"
@@ -66,12 +66,12 @@
                 />
                 <div class="horizontalFlex">
                     <CopyField :value="saturatedChrome.hex().toUpperCase()" />
-                    <Button @click="saturateClicked">Apply</Button>
+                    <Button @click="saturateClicked">{{ $t("common.actions.apply") }}</Button>
                 </div>
             </div>
             <div class="sliderpartParent" :style="desaturatedBackground">
                 <Sliderpart
-                    label="Desaturate"
+                    :label="$t('converter.adjustments.desaturate')"
                     :min="0"
                     :max="100"
                     v-model="desaturateValue"
@@ -82,12 +82,12 @@
                 />
                 <div class="horizontalFlex">
                     <CopyField :value="desaturatedChrome.hex().toUpperCase()" />
-                    <Button @click="desaturateClicked">Apply</Button>
+                    <Button @click="desaturateClicked">{{ $t("common.actions.apply") }}</Button>
                 </div>
             </div>
         </div>
         <div class="column" id="convertedColumn">
-            <h2>Converted</h2>
+            <h2>{{ $t("converter.subtitle.converted") }}</h2>
             <div id="copyFields">
                 <CopyField :value="hex" />
                 <CopyField :value="rgb" />
@@ -142,16 +142,23 @@ const lab = computed(() => {
 const brightText = computed(() => chrome.value.luminance() < 0.5);
 const colorName = computed(() => names.value[0]?.name || "");
 
-const optimalTextColor = computed(() => ({ color: brightText.value ? "var(--text-white)" : "var(--text-dark)" }));
+const optimalTextColor = computed(() => ({
+    color: brightText.value ? "var(--text-white)" : "var(--text-dark)",
+}));
 const desaturatedChrome = computed(() =>
     chroma.hsv(hsv.h, hsv.s - scale(desaturateValue.value, 0, 100, 0, hsv.s), hsv.v)
 );
-const saturatedChrome = computed(() => chroma.hsv(hsv.h, hsv.s + scale(saturateValue.value, 0, 100, 0, hsv.s), hsv.v));
-const darkenedChrome = computed(() => chroma.hsv(hsv.h, hsv.s, hsv.v - scale(darkenValue.value, 0, 100, 0, hsv.v)));
+const saturatedChrome = computed(() =>
+    chroma.hsv(hsv.h, hsv.s + scale(saturateValue.value, 0, 100, 0, hsv.s), hsv.v)
+);
+const darkenedChrome = computed(() =>
+    chroma.hsv(hsv.h, hsv.s, hsv.v - scale(darkenValue.value, 0, 100, 0, hsv.v))
+);
 const lightenedChrome = computed(() => {
     return chrome.value.set(
         "hsl.l",
-        chrome.value.get("hsl.l") + scale(lightenValue.value, 0, 100, 0, 1 - chrome.value.get("hsl.l"))
+        chrome.value.get("hsl.l") +
+            scale(lightenValue.value, 0, 100, 0, 1 - chrome.value.get("hsl.l"))
     );
 });
 const desaturatedCss = computed(() => desaturatedChrome.value.css());
@@ -201,7 +208,9 @@ const updateColorName = () => {
     sortNames();
 };
 const sortNames = () => {
-    names.value.sort((a, b) => chroma.distance(a.hex, hex.value) - chroma.distance(b.hex, hex.value));
+    names.value.sort(
+        (a, b) => chroma.distance(a.hex, hex.value) - chroma.distance(b.hex, hex.value)
+    );
 };
 const fetchNames = async () => {
     const data = await fetch("/api/name.json");

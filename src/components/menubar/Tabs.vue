@@ -2,9 +2,15 @@
     <div id="tabsWrapper">
         <div id="tabHighlight" :style="tabHighlightStyles"></div>
         <div id="tabs" ref="tabsRef">
-            <span v-for="(route, index) in routes" :key="index" ref="linksRef" class="tab" :data-link="route.path">
+            <span
+                v-for="(route, index) in routes"
+                :key="index"
+                ref="linksRef"
+                class="tab"
+                :data-link="route.path"
+            >
                 <router-link :to="route.path" active-class="activeTab">
-                    {{ route.name }}
+                    {{ $t(route.name?.toString() ?? "") }}
                 </router-link>
             </span>
         </div>
@@ -32,10 +38,13 @@ onMounted(() => {
 });
 
 const updateHighlight = () => {
-    highlightWidth.value = linksRef.value.find(lr => lr.dataset.link === Router.currentRoute.value.path)!.clientWidth;
+    highlightWidth.value = linksRef.value.find(
+        (lr) => lr.dataset.link === Router.currentRoute.value.path
+    )!.clientWidth;
     highlightMarginLeft.value =
-        linksRef.value.find(lr => lr.dataset.link === Router.currentRoute.value.path)!.getBoundingClientRect().left -
-        tabsRef.value!.getBoundingClientRect().left;
+        linksRef.value
+            .find((lr) => lr.dataset.link === Router.currentRoute.value.path)!
+            .getBoundingClientRect().left - tabsRef.value!.getBoundingClientRect().left;
     prevHighlightMarginLeft.value = highlightMarginLeft.value;
     prevHighlightWidth.value = highlightWidth.value;
 };
