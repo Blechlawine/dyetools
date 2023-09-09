@@ -7,10 +7,7 @@
             </span>
 
             <div class="rightStuff">
-                <Dropdown
-                    :values="$i18n.availableLocales"
-                    @select="$i18n.locale = $i18n.availableLocales[$event]"
-                ></Dropdown>
+                <Dropdown :values="$i18n.availableLocales" v-model="$i18n.locale"></Dropdown>
                 <ToggleSwitch></ToggleSwitch>
             </div>
         </div>
@@ -24,6 +21,12 @@
 import Tabs from "./Tabs.vue";
 import Dropdown from "../inputs/Dropdown.vue";
 import ToggleSwitch from "../ToggleSwitch.vue";
+import { useLocalStorage } from "@vueuse/core";
+import { useI18n } from "vue-i18n";
+
+const i18n = useI18n();
+
+useLocalStorage("dyetools-lang", i18n.locale); // this updates localstorage whenever i18n.locale changes, very cool
 </script>
 
 <style>
