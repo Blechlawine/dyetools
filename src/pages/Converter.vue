@@ -213,7 +213,7 @@ const sortNames = () => {
     );
 };
 const fetchNames = async () => {
-    const data = await fetch("/api/name.json");
+    const data = await fetch("/api/Name.json");
     names.value = await data.json();
     updateColorName();
 };
