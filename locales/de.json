@@ -51,5 +51,11 @@
             "yellow": "Gelb",
             "key": "Key"
         }
+    },
+    "privacy": {
+        "title": "Datenschutzerklärung"
+    },
+    "impressum": {
+        "title": "Impressum"
     }
 }

@@ -51,5 +51,11 @@
             "yellow": "Yellow",
             "key": "Key"
         }
+    },
+    "privacy": {
+        "title": "Privacy policy (german)"
+    },
+    "impressum": {
+        "title": "Impressum (german)"
     }
 }

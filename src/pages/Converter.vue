@@ -1,10 +1,10 @@
 <template>
-    <teleport to="head">
+    <Head>
         <meta name="description" content="Convert colors into many formats" />
         <meta property="og:description" content="Convert colors into many formats" />
         <meta property="og:title" content="Dyetools - Color converter" />
         <title>Dyetools - {{ $t("converter.title") }}</title>
-    </teleport>
+    </Head>
     <div class="content">
         <div class="column" id="pickerColumn">
             <ColorPickerBig
@@ -106,6 +106,7 @@ import ColorPickerBig from "../components/picker/ColorPickerBig.vue";
 import { computed, onMounted, reactive, ref } from "vue";
 import chroma from "chroma-js";
 import { scale } from "../utils";
+import { Head } from "@unhead/vue/components";
 
 onMounted(() => {
     fetchNames();
@@ -146,19 +147,19 @@ const optimalTextColor = computed(() => ({
     color: brightText.value ? "var(--text-white)" : "var(--text-dark)",
 }));
 const desaturatedChrome = computed(() =>
-    chroma.hsv(hsv.h, hsv.s - scale(desaturateValue.value, 0, 100, 0, hsv.s), hsv.v)
+    chroma.hsv(hsv.h, hsv.s - scale(desaturateValue.value, 0, 100, 0, hsv.s), hsv.v),
 );
 const saturatedChrome = computed(() =>
-    chroma.hsv(hsv.h, hsv.s + scale(saturateValue.value, 0, 100, 0, hsv.s), hsv.v)
+    chroma.hsv(hsv.h, hsv.s + scale(saturateValue.value, 0, 100, 0, hsv.s), hsv.v),
 );
 const darkenedChrome = computed(() =>
-    chroma.hsv(hsv.h, hsv.s, hsv.v - scale(darkenValue.value, 0, 100, 0, hsv.v))
+    chroma.hsv(hsv.h, hsv.s, hsv.v - scale(darkenValue.value, 0, 100, 0, hsv.v)),
 );
 const lightenedChrome = computed(() => {
     return chrome.value.set(
         "hsl.l",
         chrome.value.get("hsl.l") +
-            scale(lightenValue.value, 0, 100, 0, 1 - chrome.value.get("hsl.l"))
+            scale(lightenValue.value, 0, 100, 0, 1 - chrome.value.get("hsl.l")),
     );
 });
 const desaturatedCss = computed(() => desaturatedChrome.value.css());
@@ -209,7 +210,7 @@ const updateColorName = () => {
 };
 const sortNames = () => {
     names.value.sort(
-        (a, b) => chroma.distance(a.hex, hex.value) - chroma.distance(b.hex, hex.value)
+        (a, b) => chroma.distance(a.hex, hex.value) - chroma.distance(b.hex, hex.value),
     );
 };
 const fetchNames = async () => {

@@ -1,103 +1,105 @@
 <template>
-    <teleport to="head">
+    <Head>
         <meta name="description" content="Check your colors for AA and AAA compatibility" />
         <meta property="og:description" content="Check your colors for AA and AAA compatibility" />
         <meta property="og:title" content="Dyetools - Contrast checker" />
         <title>Dyetools - {{ $t("contrast-checker.title") }}</title>
-    </teleport>
-    <div class="column">
-        <h1 id="score">{{ score.toString().substring(0, 4) }}</h1>
-
-        <div id="checks">
-            <div class="checkmarkDiv">
-                <p>AA</p>
-                <Icon
-                    size="xl"
-                    :name="AApass ? 'i-tabler-check' : 'i-tabler-x'"
-                    :style="aaColor"
-                ></Icon>
-            </div>
-            <div class="checkmarkDiv">
-                <p>AAA</p>
-                <Icon
-                    size="xl"
-                    :name="AAApass ? 'i-tabler-check' : 'i-tabler-x'"
-                    :style="aaaColor"
-                ></Icon>
-            </div>
-            <div class="checkmarkDiv">
-                <p>AA Large</p>
-                <Icon
-                    size="xl"
-                    :name="AALargePass ? 'i-tabler-check' : 'i-tabler-x'"
-                    :style="aaLargeColor"
-                ></Icon>
-            </div>
-            <div class="checkmarkDiv">
-                <p>AAA Large</p>
-                <Icon
-                    size="xl"
-                    :name="AAALargePass ? 'i-tabler-check' : 'i-tabler-x'"
-                    :style="aaaLargeColor"
-                ></Icon>
-            </div>
-        </div>
-
-        <div class="colors">
-            <div class="foregroundColor" :style="foregroundColorBackground">
-                <input
-                    type="text"
-                    class="largeExampleInput"
-                    :value="quoteForeground?.groot ?? ''"
-                    :style="backgroundColorText"
-                    id="backgroundLargeInput"
-                />
-                <textarea
-                    type="text"
-                    class="smallExampleInput"
-                    :value="quoteForeground?.quote ?? ''"
-                    :style="backgroundColorText"
-                    id="backgroundSmallInput"
-                ></textarea>
-            </div>
-            <div class="backgroundColor" :style="backgroundColorBackground">
-                <input
-                    type="text"
-                    class="largeExampleInput"
-                    :value="quoteBackground?.groot ?? ''"
-                    :style="foregroundColorText"
-                    id="foregroundLargeInput"
-                />
-                <textarea
-                    type="text"
-                    class="smallExampleInput"
-                    :value="quoteBackground?.quote ?? ''"
-                    :style="foregroundColorText"
-                    id="foregroundSmallInput"
-                ></textarea>
-            </div>
-        </div>
-    </div>
-    <div class="horizontalFlex" id="pickerBox">
+    </Head>
+    <div class="checker">
         <div class="column">
-            <ColorPickerBig
-                :hue="foregroundColor.h"
-                :sat="foregroundColor.s"
-                :val="foregroundColor.v"
-                id="foregroundPicker"
-                class="colorPickerBig"
-                @change="onForegroundColorChanged"
-            />
+            <h1 id="score">{{ score.toString().substring(0, 4) }}</h1>
+
+            <div id="checks">
+                <div class="checkmarkDiv">
+                    <p>AA</p>
+                    <Icon
+                        size="xl"
+                        :name="AApass ? 'i-tabler-check' : 'i-tabler-x'"
+                        :style="aaColor"
+                    ></Icon>
+                </div>
+                <div class="checkmarkDiv">
+                    <p>AAA</p>
+                    <Icon
+                        size="xl"
+                        :name="AAApass ? 'i-tabler-check' : 'i-tabler-x'"
+                        :style="aaaColor"
+                    ></Icon>
+                </div>
+                <div class="checkmarkDiv">
+                    <p>AA Large</p>
+                    <Icon
+                        size="xl"
+                        :name="AALargePass ? 'i-tabler-check' : 'i-tabler-x'"
+                        :style="aaLargeColor"
+                    ></Icon>
+                </div>
+                <div class="checkmarkDiv">
+                    <p>AAA Large</p>
+                    <Icon
+                        size="xl"
+                        :name="AAALargePass ? 'i-tabler-check' : 'i-tabler-x'"
+                        :style="aaaLargeColor"
+                    ></Icon>
+                </div>
+            </div>
+
+            <div class="colors">
+                <div class="foregroundColor" :style="foregroundColorBackground">
+                    <input
+                        type="text"
+                        class="largeExampleInput"
+                        :value="quoteForeground?.groot ?? ''"
+                        :style="backgroundColorText"
+                        id="backgroundLargeInput"
+                    />
+                    <textarea
+                        type="text"
+                        class="smallExampleInput"
+                        :value="quoteForeground?.quote ?? ''"
+                        :style="backgroundColorText"
+                        id="backgroundSmallInput"
+                    ></textarea>
+                </div>
+                <div class="backgroundColor" :style="backgroundColorBackground">
+                    <input
+                        type="text"
+                        class="largeExampleInput"
+                        :value="quoteBackground?.groot ?? ''"
+                        :style="foregroundColorText"
+                        id="foregroundLargeInput"
+                    />
+                    <textarea
+                        type="text"
+                        class="smallExampleInput"
+                        :value="quoteBackground?.quote ?? ''"
+                        :style="foregroundColorText"
+                        id="foregroundSmallInput"
+                    ></textarea>
+                </div>
+            </div>
         </div>
-        <div class="column">
-            <ColorPickerBig
-                :hue="backgroundColor.h"
-                :sat="backgroundColor.s"
-                :val="backgroundColor.v"
-                id="backgroundPicker"
-                class="colorPickerBig"
-                @change="onBackgroundColorChanged"
-            />
+        <div class="horizontalFlex" id="pickerBox">
+            <div class="column">
+                <ColorPickerBig
+                    :hue="foregroundColor.h"
+                    :sat="foregroundColor.s"
+                    :val="foregroundColor.v"
+                    id="foregroundPicker"
+                    class="colorPickerBig"
+                    @change="onForegroundColorChanged"
+                />
+            </div>
+            <div class="column">
+                <ColorPickerBig
+                    :hue="backgroundColor.h"
+                    :sat="backgroundColor.s"
+                    :val="backgroundColor.v"
+                    id="backgroundPicker"
+                    class="colorPickerBig"
+                    @change="onBackgroundColorChanged"
+                />
+            </div>
         </div>
     </div>
 </template>
@@ -108,6 +110,7 @@ import chroma from "chroma-js";
 import Icon from "../components/Icon.vue";
 import { useI18n } from "vue-i18n";
 import { type Quote } from "../types";
+import { Head } from "@unhead/vue/components";
 
 const { locale } = useI18n();
 
@@ -155,10 +158,10 @@ const getQuotes = async () => {
 };
 
 const foregroundChrome = computed(() =>
-    chroma.hsv(foregroundColor.h, foregroundColor.s, foregroundColor.v)
+    chroma.hsv(foregroundColor.h, foregroundColor.s, foregroundColor.v),
 );
 const backgroundChrome = computed(() =>
-    chroma.hsv(backgroundColor.h, backgroundColor.s, backgroundColor.v)
+    chroma.hsv(backgroundColor.h, backgroundColor.s, backgroundColor.v),
 );
 const foregroundColorText = computed(() => ({
     color: foregroundChrome.value.css(),
@@ -233,14 +236,14 @@ const score = computed(() => {
         l2 = temp;
     }
 
-    const passed = (l1 + 0.05) / (l2 + 0.05);
+    const score = (l1 + 0.05) / (l2 + 0.05);
 
-    AApass.value = passed > 4.5;
-    AALargePass.value = passed > 3;
-    AAApass.value = passed > 7;
-    AAALargePass.value = passed > 4.5;
+    AApass.value = score > 4.5;
+    AALargePass.value = score > 3;
+    AAApass.value = score > 7;
+    AAALargePass.value = score > 4.5;
 
-    return passed;
+    return score;
 });
 </script>
 <style scoped>
@@ -300,6 +303,7 @@ textarea {
 #foregroundPicker {
     margin-left: 2vw;
 }
+
 #backgroundPicker {
     margin-right: 2vw;
 }
@@ -338,10 +342,15 @@ textarea {
     gap: 40px;
 }
 
+.checker {
+    margin-bottom: 10vh;
+    position: relative;
+}
+
 @media screen and (min-width: 1500px) {
     #pickerBox {
         position: absolute;
-        top: 0;
+        bottom: 0;
     }
 }
 
@@ -365,6 +374,7 @@ textarea {
     #foregroundPicker {
         margin-left: 0;
     }
+
     #backgroundPicker {
         margin-right: 0;
     }

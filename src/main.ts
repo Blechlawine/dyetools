@@ -7,6 +7,7 @@ import App from "./App.vue";
 import "./global.css";
 import routes from "./routes";
 import "virtual:uno.css";
+import { createHead } from "@unhead/vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -23,4 +24,6 @@ const i18n = createI18n({
     },
 });
 
-createApp(App).use(i18n).use(router).mount("#app");
+const head = createHead();
+
+createApp(App).use(head).use(i18n).use(router).mount("#app");

@@ -1,9 +1,10 @@
 <template>
     <div id="tabsWrapper">
-        <div id="tabHighlight" :style="tabHighlightStyles"></div>
+        <div id="tabHighlight" :style="tabHighlightStyles" v-if="showHighlight"></div>
         <div id="tabs" ref="tabsRef">
             <span
                 v-for="(route, index) in routes"
+                v-show="route.isTab"
                 :key="index"
                 ref="linksRef"
                 class="tab"
@@ -23,6 +24,9 @@ import routes from "../../routes";
 import { prevHighlightMarginLeft, prevHighlightWidth } from "../../stores/store";
 
 const Router = useRouter();
+const showHighlight = computed(
+    () => routes.find((r) => r.path === Router.currentRoute.value.path)?.isTab,
+);
 
 const highlightWidth = ref(0);
 const highlightMarginLeft = ref(0);
@@ -39,7 +43,7 @@ onMounted(() => {
 
 const updateHighlight = () => {
     highlightWidth.value = linksRef.value.find(
-        (lr) => lr.dataset.link === Router.currentRoute.value.path
+        (lr) => lr.dataset.link === Router.currentRoute.value.path,
     )!.clientWidth;
     highlightMarginLeft.value =
         linksRef.value

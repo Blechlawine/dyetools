@@ -1,10 +1,10 @@
 <template>
-    <teleport to="head">
+    <Head>
         <meta name="description" :content="colors.map((c) => c.hex).join(', ')" />
         <meta property="og:description" :content="colors.map((c) => c.hex).join(', ')" />
         <meta property="og:title" content="Dyetools - Color palette" />
         <title>Dyetools - {{ $t("palette.title") }}</title>
-    </teleport>
+    </Head>
     <div class="palette">
         <div class="settingsBar">
             <Dropdown
@@ -52,6 +52,7 @@ import { genRandHex, copyString } from "../utils";
 import { toastText } from "../stores/store";
 import { useI18n } from "vue-i18n";
 import { type Color } from "../types";
+import { Head } from "@unhead/vue/components";
 
 const { t } = useI18n();
 
