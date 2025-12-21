@@ -15,7 +15,7 @@ Hegelbachweg 2
 
 ## Kontakt
 
-E-Mail: marc@zmarc.de
+E-Mail: info@zmarc.de
 
 ## Redaktionell verantwortlich
 

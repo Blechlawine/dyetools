@@ -4,7 +4,11 @@
 
 ### Allgemeine Hinweise
 
-Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können. Ausführliche Informationen zum Thema Datenschutz entnehmen Sie unserer unter diesem Text aufgeführten Datenschutzerklärung.
+Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren
+personenbezogenen Daten passiert, wenn Sie diese Website besuchen.
+Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert
+werden können. Ausführliche Informationen zum Thema Datenschutz entnehmen Sie
+unserer unter diesem Text aufgeführten Datenschutzerklärung.
 
 ### Datenerfassung auf dieser Website
 
@@ -48,18 +52,22 @@ Datenschutzerklärung.
 
 ## 2. Hosting
 
-### Strato
+Wir hosten die Inhalte unserer Website bei folgendem Anbieter:
 
-Anbieter ist die Strato AG, Otto-Ostrowski-Straße 7, 10249 Berlin (nachfolgend "Strato").
-Wenn Sie unsere Website besuchen, erfasst Strato verschiedene Logfiles inklusive Ihrer IP-Adressen.
+### Hetzner
 
-Weitere Informationen entnehmen Sie der Datenschutzerklärung von Strato: [https://www.strato.de/datenschutz/](https://www.strato.de/datenschutz/)
+Anbieter ist die Hetzner Online GmbH, Industriestr. 25, 91710 Gunzenhausen
+(nachfolgend Hetzner).
+Details entnehmen Sie der Datenschutzerkl&auml;rung von Hetzner:
+[https://www.hetzner.com/de/legal/privacy-policy/](https://www.hetzner.com/de/legal/privacy-policy/).
 
-Die Verwendung von Strato erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Wir haben ein berechtigtes
-Interesse an einer möglichst zuverlässigen Darstellung unserer Website. Sofern eine entsprechende
-Einwilligung abgefragt wurde, erfolgt die Verarbeitung ausschließlich auf Grundlage von Art. 6 Abs. 1
-lit. a DSGVO und &sect; 25 Abs. 1 TTDSG, soweit die Einwilligung die Speicherung von Cookies oder den
-Zugriff auf Informationen im Endgerät des Nutzers (z.B. Device-Fingerprinting) im Sinne des TTDSG
+Die Verwendung von Hetzner erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f
+DSGVO. Wir haben ein berechtigtes Interesse an einer m&ouml;glichst
+zuverl&auml;ssigen Darstellung unserer Website. Sofern eine entsprechende
+Einwilligung abgefragt wurde, erfolgt die Verarbeitung ausschlie&szlig;lich auf
+Grundlage von Art. 6 Abs. 1 lit. a DSGVO und &sect; 25 Abs. 1 TDDDG, soweit die
+Einwilligung die Speicherung von Cookies oder den Zugriff auf Informationen im
+Endger&auml;t des Nutzers (z.B. Device-Fingerprinting) im Sinne des TDDDG
 umfasst. Die Einwilligung ist jederzeit widerrufbar.
 
 ## 3. Allgemeine Hinweise und Pflichtinformationen
@@ -87,7 +95,7 @@ Hegelbachweg 2
 
 88074 Meckenbeuren
 
-E-Mail: marc@zmarc.de
+E-Mail: info@zmarc.de
 
 Verantwortliche Stelle ist die natürliche oder juristische Person, die allein oder gemeinsam mit
 anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten (z.B. Namen,
