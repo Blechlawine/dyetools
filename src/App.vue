@@ -3,16 +3,6 @@ import TheFooter from "./components/TheFooter.vue";
 import MenuBar from "./components/menubar/MenuBar.vue";
 import Toast from "./components/Toast.vue";
 import { toastText } from "./stores/store";
-import { useShynet } from "./composables/useShynet";
-import { useRouter } from "vue-router";
-
-const shynet = useShynet();
-
-const Router = useRouter();
-
-Router.afterEach(() => {
-    shynet.newPageLoad();
-});
 
 const tabs = [
     { id: 0, title: "Contrast-checker", link: "/" },
